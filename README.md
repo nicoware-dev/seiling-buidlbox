@@ -1,10 +1,14 @@
-# Seiling Buidlbox 🚀
+![Logo](assets/logo.png) 
 
 > **Complete No-Code AI Agent Development Toolkit for Sei Network**
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://www.docker.com/)
 [![Sei Network](https://img.shields.io/badge/Sei%20Network-Compatible-green.svg)](https://sei.io/)
+
+
+**🚀 This project was built for the [Sei Network Hackathon - AI Accelathon](https://dorahacks.io/hackathon/aiaccelathon/buidl) Tooling and Infra Track!**
 
 ## 🌟 Overview
 
@@ -12,6 +16,12 @@
 
 ### 🎯 Vision
 To become the definitive toolkit for no-code AI agent development on Sei Network, enabling developers to rapidly build, deploy, and manage sophisticated blockchain automation systems.
+
+
+## 🏗️ Architecture
+
+![Architecture Diagram](assets/architecture.png)
+
 
 ## 🚀 What You Get
 
@@ -48,8 +58,6 @@ To become the definitive toolkit for no-code AI agent development on Sei Network
   - *Image: `traefik:v3.0`* - **Disabled by default**
 - **[Ollama](packages/seiling-buidlbox-docs/docs/services/ollama.md)** - Local LLM server (Port: 11434)
   - *Image: `ollama/ollama:latest`* - **Disabled by default** (requires 8GB+ RAM)
-
-## 🏗️ Architecture
 
 ### Core Infrastructure Services
 ```
