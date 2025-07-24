@@ -1,0 +1,85 @@
+{
+  "examples": {
+    "stdio_docker_mode": {
+      "description": "Run SEI MCP server in Docker with STDIO transport (recommended)",
+      "config": {
+        "sei-mcp-server": {
+          "command": "docker",
+          "args": [
+            "run",
+            "-i",
+            "--rm",
+            "-e", "MCP_MODE=stdio",
+            "0xn1c0/sei-mcp-server:latest"
+          ],
+          "env": {
+            "PRIVATE_KEY": "0x..."
+          }
+        }
+      }
+    },
+    "stdio_docker_hub": {
+      "description": "Run SEI MCP server from Docker Hub (STDIO mode, when published)",
+      "config": {
+        "sei-mcp-server": {
+          "command": "docker",
+          "args": [
+            "run",
+            "-i",
+            "--rm",
+            "-e", "MCP_MODE=stdio",
+            "0xn1c0/sei-mcp-server:latest"
+          ],
+          "env": {
+            "PRIVATE_KEY": "0x..."
+          }
+        }
+      }
+    },
+    "http_url_mode": {
+      "description": "Run SEI MCP server with HTTP/SSE transport (persistent server)",
+      "config": {
+        "sei-mcp-server": {
+          "url": "http://localhost:3002/sse",
+          "headers": {
+            "X-Private-Key": "0x..."
+          }
+        }
+      }
+    },
+    "http_docker_hub": {
+      "description": "Run SEI MCP server from Docker Hub (HTTP/SSE mode, persistent server)",
+      "config": {
+        "sei-mcp-server": {
+          "command": "docker",
+          "args": [
+            "run",
+            "-d",
+            "--name", "sei-mcp-server",
+            "-p", "3002:3002",
+            "0xn1c0/sei-mcp-server:latest"
+          ]
+        }
+      }
+    },
+    "local_command": {
+      "description": "Run built server locally via command",
+      "config": {
+        "sei-mcp-server": {
+          "command": "node",
+          "args": ["./build/index.js"],
+          "cwd": "/path/to/sei-mcp-server",
+          "env": {
+            "PRIVATE_KEY": "0x..."
+          }
+        }
+      }
+    }
+  },
+  "notes": {
+    "private_key": "Replace '0x...' with your actual SEI private key",
+    "docker_hub": "Only one image is needed: '0xn1c0/sei-mcp-server:latest'. Use '-e MCP_MODE=stdio' for STDIO mode, or run without it for HTTP/SSE mode. Both modes can be run at the same time using the same image.",
+    "networks": "Server supports sei, sei-testnet, and sei-devnet networks",
+    "security": "Private keys can be provided via env vars or client headers (HTTP mode)"
+  }
+} 
