@@ -1,0 +1,78 @@
+{
+  "name": "n8n-nodes-sei",
+  "version": "0.1.0",
+  "description": "Custom n8n nodes for Sei blockchain integration",
+  "keywords": [
+    "n8n-community-node-package",
+    "sei",
+    "blockchain",
+    "cosmos",
+    "web3",
+    "evm",
+    "smart-contracts",
+    "n8n"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nicoware-dev/n8n-nodes-sei#readme",
+  "author": {
+    "name": "nicoware-dev",
+    "email": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicoware-dev/n8n-nodes-sei.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nicoware-dev/n8n-nodes-sei/issues"
+  },
+  "engines": {
+    "node": ">=18.10",
+    "pnpm": ">=9.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "npx only-allow npm",
+    "build": "tsc --skipLibCheck && gulp build:all",
+    "dev": "tsc --watch",
+    "dev:install": "node scripts/dev-install.js",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials",
+    "lintfix": "eslint nodes credentials --fix",
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/SeiApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Sei/SeiTxBuilder.node.js",
+      "dist/nodes/Sei/SeiTxExecutor.node.js",
+      "dist/nodes/Sei/SeiExplorer.node.js",
+      "dist/nodes/Sei/SeiDeployContract.node.js",
+      "dist/nodes/Sei/SeiCompileContract.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "chokidar": "^4.0.3",
+    "eslint": "^8.56.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.1",
+    "gulp": "^4.0.2",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "ethers": "^6.14.4",
+    "lodash": "^4.17.21",
+    "solc": "^0.8.26"
+  }
+}
