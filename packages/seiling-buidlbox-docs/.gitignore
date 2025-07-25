@@ -1,0 +1,14 @@
+node_modules
+build
+build/
+bun.lock
+/out
+
+
+
+.env
+.env.production
+.env.local
+.env.bak
+.env_main
+

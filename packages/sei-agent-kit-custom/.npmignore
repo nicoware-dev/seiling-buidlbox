@@ -1,0 +1,13 @@
+# Ignore test files and folders
+test/
+examples/
+.git/
+.gitignore
+README.md
+*.log
+node_modules/
+bun.lock
+package-lock.json
+pnpm-lock.yaml
+.env
+.DS_Store 

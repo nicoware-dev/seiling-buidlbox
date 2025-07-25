@@ -1,0 +1,150 @@
+/**
+ * Component Styles
+ * Reusable component patterns and UI elements
+ */
+
+/* Feature Cards */
+.features-section {
+  background: var(--sbx-features-bg);
+  color: var(--ifm-font-color-base);
+  padding: var(--sbx-space-xl) 0;
+  text-align: center;
+}
+
+.features-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--sbx-space-lg);
+  flex-wrap: wrap;
+  background: var(--sbx-features-bg);
+  border-radius: var(--sbx-radius-xl);
+  padding: var(--sbx-space-lg);
+  margin: var(--sbx-space-lg) auto 0 auto;
+  max-width: 1200px;
+  box-shadow: var(--ifm-global-shadow-lw);
+}
+
+.feature-card {
+  background: var(--ifm-card-background-color, var(--ifm-background-color));
+  border-radius: var(--sbx-radius-lg);
+  box-shadow: var(--ifm-global-shadow-lw);
+  padding: var(--sbx-space-lg) var(--sbx-space-md);
+  flex: 1 1 220px;
+  min-width: 220px;
+  max-width: 300px;
+  margin: var(--sbx-space-sm) 0;
+  transition: box-shadow var(--sbx-transition-fast), background var(--sbx-transition-fast);
+  color: var(--ifm-font-color-base);
+}
+
+.feature-card:hover {
+  box-shadow: var(--ifm-global-shadow-md);
+  background: var(--ifm-hover-overlay);
+}
+
+/* Quickstart Section */
+.quickstart-section {
+  background: linear-gradient(135deg, var(--sbx-features-bg) 60%, var(--ifm-background-color) 100%);
+  border-radius: var(--sbx-radius-xl);
+  margin: var(--sbx-space-lg) auto;
+  max-width: 90%;
+  box-shadow: var(--ifm-global-shadow-lw);
+  padding: var(--sbx-space-lg);
+  text-align: center;
+}
+
+.quickstart-section h2 {
+  margin-bottom: var(--sbx-space-lg);
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.quickstart-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sbx-space-lg);
+  align-items: center;
+}
+
+.quickstart-card {
+  background: var(--ifm-background-surface-color, var(--ifm-card-background-color, var(--ifm-background-color)));
+  border-radius: var(--sbx-radius-lg);
+  box-shadow: var(--ifm-global-shadow-md);
+  padding: var(--sbx-space-lg) var(--sbx-space-md);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 90%;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  text-align: left;
+}
+
+.quickstart-card h3 {
+  margin-top: 0;
+  margin-bottom: var(--sbx-space-xs);
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.quickstart-desc {
+  margin-bottom: var(--sbx-space-md);
+  color: var(--ifm-color-success);
+  font-size: var(--sbx-text-lg);
+  font-weight: 500;
+}
+
+.quickstart-card .theme-code-block {
+  border-radius: var(--sbx-radius-md);
+  box-shadow: var(--ifm-global-shadow-lw);
+  font-size: var(--sbx-text-base);
+  background: var(--ifm-background-color);
+  margin: 0 auto;
+  min-width: 220px;
+  max-width: 100%;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+  cursor: pointer;
+  z-index: var(--sbx-z-fixed);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all var(--sbx-transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--sbx-text-xl);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+/* Dark mode enhancements for back to top */
+[data-theme='dark'] .back-to-top {
+  background: var(--ifm-color-primary);
+  box-shadow: 0 4px 16px rgba(96, 165, 250, 0.3);
+}
+
+[data-theme='dark'] .back-to-top:hover {
+  background: var(--ifm-color-primary-light);
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.4);
+} 

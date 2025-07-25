@@ -1,0 +1,142 @@
+/**
+ * CSS Custom Properties and Theme Variables
+ * Centralized color palette and design tokens for Seiling Buidlbox
+ */
+
+/* Seiling Buidlbox Color Palette and Theme Variables */
+:root {
+  /* Primary Brand Colors */
+  --sbx-blue: #2563eb; /* Main blue */
+  --sbx-blue-dark: #1e40af;
+  --sbx-blue-light: #60a5fa;
+  --sbx-green: #10b981; /* Tech green */
+  --sbx-green-dark: #047857;
+  --sbx-green-light: #6ee7b7;
+  --sbx-gray: #f3f4f6; /* Light gray background */
+  --sbx-gray-dark: #374151;
+  --sbx-gray-medium: #6b7280;
+  --sbx-gray-light: #e5e7eb;
+  --sbx-white: #ffffff;
+  --sbx-black: #18181b;
+
+  /* Docusaurus/Infima overrides */
+  --ifm-color-primary: var(--sbx-blue);
+  --ifm-color-primary-dark: var(--sbx-blue-dark);
+  --ifm-color-primary-light: var(--sbx-blue-light);
+  --ifm-color-success: var(--sbx-green);
+  --ifm-background-color: var(--sbx-gray);
+  --ifm-background-surface-color: var(--sbx-white);
+  --ifm-card-background-color: var(--sbx-white);
+  --ifm-font-color-base: #22292f;
+  --ifm-font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'Roboto Mono', 'Fira Mono', 'Menlo', monospace;
+  --ifm-global-shadow-lw: 0 2px 8px 0 rgba(37, 99, 235, 0.04);
+  --ifm-global-shadow-md: 0 4px 16px 0 rgba(37, 99, 235, 0.08);
+  --ifm-hover-overlay: var(--sbx-blue-light);
+  --sbx-features-bg: #e0e7ef;
+
+  /* Spacing Scale */
+  --sbx-space-xs: 0.5rem;
+  --sbx-space-sm: 1rem;
+  --sbx-space-md: 1.5rem;
+  --sbx-space-lg: 2rem;
+  --sbx-space-xl: 3rem;
+  --sbx-space-2xl: 4rem;
+
+  /* Font Sizes */
+  --sbx-text-xs: 0.75rem;
+  --sbx-text-sm: 0.875rem;
+  --sbx-text-base: 1rem;
+  --sbx-text-lg: 1.125rem;
+  --sbx-text-xl: 1.25rem;
+  --sbx-text-2xl: 1.5rem;
+  --sbx-text-3xl: 1.875rem;
+  --sbx-text-4xl: 2.25rem;
+
+  /* Border Radius */
+  --sbx-radius-sm: 0.5rem;
+  --sbx-radius-md: 0.75rem;
+  --sbx-radius-lg: 1rem;
+  --sbx-radius-xl: 1.5rem;
+
+  /* Transitions */
+  --sbx-transition-fast: 0.2s ease;
+  --sbx-transition-normal: 0.3s ease;
+  --sbx-transition-slow: 0.5s ease;
+
+  /* Z-Index Scale */
+  --sbx-z-dropdown: 1000;
+  --sbx-z-sticky: 1020;
+  --sbx-z-fixed: 1030;
+  --sbx-z-modal: 1040;
+  --sbx-z-tooltip: 1070;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --sbx-blue: #60a5fa;
+  --sbx-blue-dark: #2563eb;
+  --sbx-blue-light: #93c5fd;
+  --sbx-green: #6ee7b7;
+  --sbx-green-dark: #10b981;
+  --sbx-green-light: #a7f3d0;
+  --sbx-gray: #18181b;
+  --sbx-gray-dark: #d1d5db;
+  --sbx-gray-medium: #9ca3af;
+  --sbx-gray-light: #374151;
+  --sbx-white: #23272f;
+  --sbx-black: #f3f4f6;
+
+  --ifm-color-primary: var(--sbx-blue);
+  --ifm-color-primary-dark: var(--sbx-blue-dark);
+  --ifm-color-primary-light: var(--sbx-blue-light);
+  --ifm-color-success: var(--sbx-green);
+  --ifm-background-color: var(--sbx-black);
+  --ifm-background-surface-color: #23272f;
+  --ifm-card-background-color: #23272f;
+  --ifm-font-color-base: #e5e7eb;
+  --ifm-hover-overlay: #1e293b;
+  --sbx-features-bg: #1e293b;
+}
+
+/* Light Theme Specific */
+[data-theme='light'] {
+  --sbx-features-bg: #e0e7ef;
+}
+
+/* System Theme Support - Auto-detect based on browser preference */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    /* Apply dark theme variables when system is dark and no explicit theme is set */
+    --sbx-blue: #60a5fa;
+    --sbx-blue-dark: #2563eb;
+    --sbx-blue-light: #93c5fd;
+    --sbx-green: #6ee7b7;
+    --sbx-green-dark: #10b981;
+    --sbx-green-light: #a7f3d0;
+    --sbx-gray: #18181b;
+    --sbx-gray-dark: #d1d5db;
+    --sbx-gray-medium: #9ca3af;
+    --sbx-gray-light: #374151;
+    --sbx-white: #23272f;
+    --sbx-black: #f3f4f6;
+
+    --ifm-color-primary: var(--sbx-blue);
+    --ifm-color-primary-dark: var(--sbx-blue-dark);
+    --ifm-color-primary-light: var(--sbx-blue-light);
+    --ifm-color-success: var(--sbx-green);
+    --ifm-background-color: var(--sbx-black);
+    --ifm-background-surface-color: #23272f;
+    --ifm-card-background-color: #23272f;
+    --ifm-font-color-base: #e5e7eb;
+    --ifm-hover-overlay: #1e293b;
+    --sbx-features-bg: #1e293b;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme]) {
+    /* Apply light theme variables when system is light and no explicit theme is set */
+    --sbx-features-bg: #e0e7ef;
+  }
+} 

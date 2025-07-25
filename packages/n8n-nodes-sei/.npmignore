@@ -1,0 +1,16 @@
+*.tgz
+*.log
+scripts/
+test/
+workflows/
+examples/
+start.bat
+gulpfile.js
+publish-guide.md
+.vscode/
+.idea/
+.DS_Store
+.env
+coverage/
+*.tsbuildinfo
+npm-debug.log 

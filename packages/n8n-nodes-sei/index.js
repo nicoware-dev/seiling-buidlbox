@@ -1,0 +1,1 @@
+// This file is required by n8n community node packages 
