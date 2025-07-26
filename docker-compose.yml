@@ -1,0 +1,28 @@
+# Main Docker Compose file for Seiling Buidlbox
+# This file only defines shared volumes and networks.
+# All services are defined in modular service files (docker-compose.*.yml).
+# Always use this file as the base, e.g.:
+#   docker-compose -f docker-compose.yml -f docker/services/docker-compose.n8n.yml -f docker/services/docker-compose.traefik.yml ... up -d
+
+name: seiling-buidlbox
+
+volumes:
+  # Database volumes
+  postgres_data:
+  redis_data:
+  qdrant_data:
+  neo4j_data:
+  # Application volumes
+  n8n_storage:
+  openwebui_storage:
+  flowise_storage:
+  ollama_storage:
+  cambrian_storage:
+  eliza_storage:
+  sei_mcp_storage:
+  # Reverse proxy volumes
+  traefik_letsencrypt:
+
+networks:
+  seiling_network:
+    driver: bridge 

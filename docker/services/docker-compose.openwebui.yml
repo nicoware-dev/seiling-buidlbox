@@ -1,0 +1,36 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: seiling-openwebui
+    restart: unless-stopped
+    environment:
+      - ENABLE_OPENWEBUI=${ENABLE_OPENWEBUI:-yes}
+      - PORT=8080
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-seiling-webui-secret}
+      - WEBUI_AUTH=${WEBUI_AUTH:-False}
+      - DEFAULT_MODELS=${DEFAULT_MODELS:-qwen2.5:7b-instruct-q4_K_M}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+    volumes:
+      - openwebui_storage:/app/backend/data
+    ports:
+      - "${OPENWEBUI_PORT:-5002}:8080"
+    networks:
+      - seiling_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openwebui.rule=Host(`${OPENWEBUI_SUBDOMAIN:-chat}.${BASE_DOMAIN_NAME:-localhost}`)"
+      - "traefik.http.routers.openwebui.entrypoints=websecure"
+      - "traefik.http.routers.openwebui.tls.certresolver=myresolver"
+      - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_OPENWEBUI" = "yes" ] || [ "$ENABLE_OPENWEBUI" = "true" ]; then bash start.sh; else echo "OpenWebUI disabled by ENABLE_OPENWEBUI=$ENABLE_OPENWEBUI"; sleep infinity; fi' 

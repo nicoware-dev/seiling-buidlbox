@@ -1,0 +1,55 @@
+services:
+  eliza:
+    image: 0xn1c0/eliza:multi
+    container_name: seiling-eliza
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - SERVER_PORT=3000
+      - SERVER_HOST=${SERVER_HOST:-0.0.0.0}
+      - NODE_ENV=${NODE_ENV:-production}
+      - ELIZA_UI_ENABLE=${ELIZA_UI_ENABLE:-true}
+      - ELIZA_SERVER_AUTH_TOKEN=${ELIZA_SERVER_AUTH_TOKEN:-}
+      - EXPRESS_MAX_PAYLOAD=${EXPRESS_MAX_PAYLOAD:-50mb}
+      - PGLITE_DATA_DIR=/app/.eliza/.elizadb
+      - EVM_CHAINS=${EVM_CHAINS:-}
+      - BIRDEYE_API_KEY=${BIRDEYE_API_KEY:-}
+      - DISCORD_APPLICATION_ID=${DISCORD_APPLICATION_ID:-}
+      - DISCORD_API_TOKEN=${DISCORD_API_TOKEN:-}
+      - SEI_PRIVATE_KEY=${SEI_PRIVATE_KEY}
+      - PRIVATE_KEY=${SEI_PRIVATE_KEY}
+      - RPC_URL=${RPC_URL:-https://evm-rpc.sei-apis.com}
+      - OLLAMA_API_ENDPOINT=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - OLLAMA_SMALL_MODEL=${OLLAMA_SMALL_MODEL:-}
+      - OLLAMA_MEDIUM_MODEL=${OLLAMA_MEDIUM_MODEL:-}
+      - OLLAMA_LARGE_MODEL=${OLLAMA_LARGE_MODEL:-}
+      - OLLAMA_EMBEDDING_MODEL=${OLLAMA_EMBEDDING_MODEL:-}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2:3b}
+      - REMOTE_CHARACTER_URLS=${REMOTE_CHARACTER_URLS:-}
+      - ELIZA_NONINTERACTIVE=${ELIZA_NONINTERACTIVE:-false}
+      - IGNORE_BOOTSTRAP=${IGNORE_BOOTSTRAP:-false}
+      - ENABLE_ELIZA=${ENABLE_ELIZA:-yes}
+    volumes:
+      - eliza_storage:/app/.eliza
+      - ./.env:/app/.env:ro
+    ports:
+      - "${ELIZA_PORT:-5005}:3000"
+    networks:
+      - seiling_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.eliza.rule=Host(`${ELIZA_SUBDOMAIN:-eliza}.${BASE_DOMAIN_NAME:-localhost}`)"
+      - "traefik.http.routers.eliza.entrypoints=websecure"
+      - "traefik.http.routers.eliza.tls.certresolver=myresolver"
+      - "traefik.http.services.eliza.loadbalancer.server.port=3000"
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_ELIZA" = "yes" ] || [ "$ENABLE_ELIZA" = "true" ]; then bun run start; else echo "Eliza disabled by ENABLE_ELIZA=$ENABLE_ELIZA"; sleep infinity; fi'

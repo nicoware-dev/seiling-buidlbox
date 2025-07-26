@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: seiling-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-seiling123}
+      - POSTGRES_DB=${POSTGRES_DB:-seiling}
+      - ENABLE_POSTGRES=${ENABLE_POSTGRES:-yes}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_POSTGRES" = "yes" ] || [ "$ENABLE_POSTGRES" = "true" ]; then docker-entrypoint.sh postgres; else echo "Postgres disabled by ENABLE_POSTGRES=$ENABLE_POSTGRES"; sleep infinity; fi' 

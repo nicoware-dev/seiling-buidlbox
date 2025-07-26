@@ -1,0 +1,30 @@
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: seiling-neo4j
+    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH:-neo4j/seiling123}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - ENABLE_NEO4J=${ENABLE_NEO4J:-yes}
+    volumes:
+      - neo4j_data:/data
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7474/browser/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neo4j.rule=Host(`${NEO4J_SUBDOMAIN:-neo4j}.${BASE_DOMAIN_NAME:-localhost}`)"
+      - "traefik.http.routers.neo4j.entrypoints=websecure"
+      - "traefik.http.routers.neo4j.tls.certresolver=myresolver"
+      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_NEO4J" = "yes" ] || [ "$ENABLE_NEO4J" = "true" ]; then /startup/docker-entrypoint.sh neo4j; else echo "Neo4j disabled by ENABLE_NEO4J=$ENABLE_NEO4J"; sleep infinity; fi' 
