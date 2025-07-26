@@ -1,0 +1,32 @@
+services:
+  cambrian-agent:
+    image: 0xn1c0/cambrian-agent-launcher:latest
+    platform: linux/amd64
+    container_name: seiling-cambrian-agent
+    restart: unless-stopped
+    environment:
+      - ENABLE_CAMBRIAN=${ENABLE_CAMBRIAN:-yes}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+      - SEI_PRIVATE_KEY=${SEI_PRIVATE_KEY}
+      - RPC_URL=${RPC_URL}
+    volumes:
+      - cambrian_storage:/app/.cambrian
+    ports:
+      - "${CAMBRIAN_AGENT_PORT:-5006}:3000"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cambrian-agent.rule=Host(`${CAMBRIAN_SUBDOMAIN:-cambrian}.${BASE_DOMAIN_NAME:-localhost}`)"
+      - "traefik.http.routers.cambrian-agent.entrypoints=websecure"
+      - "traefik.http.routers.cambrian-agent.tls.certresolver=myresolver"
+      - "traefik.http.services.cambrian-agent.loadbalancer.server.port=3000"
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_CAMBRIAN" = "yes" ] || [ "$ENABLE_CAMBRIAN" = "true" ]; then npm start; else echo "Cambrian Agent disabled by ENABLE_CAMBRIAN=$ENABLE_CAMBRIAN"; sleep infinity; fi'

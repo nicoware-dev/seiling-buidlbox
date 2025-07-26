@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: seiling-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-seiling123}
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-seiling123}
+      - ENABLE_REDIS=${ENABLE_REDIS:-yes}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    entrypoint: >
+      sh -c 'if [ "$ENABLE_REDIS" = "yes" ] || [ "$ENABLE_REDIS" = "true" ]; then docker-entrypoint.sh redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-seiling123}; else echo "Redis disabled by ENABLE_REDIS=$ENABLE_REDIS"; sleep infinity; fi' 
