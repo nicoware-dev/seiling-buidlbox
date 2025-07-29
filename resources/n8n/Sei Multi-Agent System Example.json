@@ -1,0 +1,305 @@
+{
+  "name": "Sei Multi-Agent System Example",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a34cce78-31c2-474e-b88b-93ee2fabf276",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        160,
+        16
+      ],
+      "id": "d0348cf0-f369-4a35-b067-033063981f56",
+      "name": "Webhook",
+      "webhookId": "a34cce78-31c2-474e-b88b-93ee2fabf276"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        592,
+        16
+      ],
+      "id": "f3535a4d-47ea-41d6-98fb-03384b969a8a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1184,
+        16
+      ],
+      "id": "cca7fc2e-99ab-483f-94d7-1b1bed72fb4e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Message The Eliza Agent for fetching wallet balance and transfering SEI.",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/92a6b722-441c-4955-b9e4-7e02b5d3af85",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        240
+      ],
+      "id": "6d9cd6e2-4c2f-4d15-93f5-76917c71eaa5",
+      "name": "Eliza Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        240
+      ],
+      "id": "a9a297cb-7d02-4a4f-87c2-e3c14de1a65f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "kfdzhAZV8PEk08b6",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Message cambrian agent for DeFi Operations",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/81e5f676-b209-49c4-827b-536037e1af9a",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        752,
+        240
+      ],
+      "id": "5dd3791f-6aaf-45d0-afc0-224c89e6faca",
+      "name": "Cambrian Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Message the Custom MCP Agent for deployments",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/eb833066-810e-40c6-bf06-78d45ea6b223",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        240
+      ],
+      "id": "cae795e7-ed72-4ba2-aa54-f0d0363cbd53",
+      "name": "Custom MCP Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Messace the Sei MCP Agent from Sei blockchain info",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/d6ac414f-311c-4b0e-ae36-a83d7fd8966f",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        240
+      ],
+      "id": "a52cca17-30f2-4e80-a465-7cb4eb6bde38",
+      "name": "Sei MCP Agent"
+    },
+    {
+      "parameters": {
+        "content": "\n# **Multi-Agent System Example**\n\nDemonstrates a multi-agent setup where several AI agents and tools collaborate via webhooks and HTTP requests. Useful for orchestrating complex workflows involving multiple services or agents.\n\n## **Credentials:** \nOpenAI (for language model), Postgres (for chat memory), agent endpoints as needed\n\n## **Setup:** \nSet up all required credentials and endpoints for each agent/tool.\n\n## **How to Use:** \nSend a POST request to the main webhook to start the workflow. The AI agent coordinates with other agents/tools to fulfill the request.\n\n## **Tip:** \nCustomize agent endpoints and add/remove tools as needed for your use case.",
+        "height": 592,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -80
+      ],
+      "id": "a81de875-0f4d-4e9f-978e-f2d2ad150de0",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "seiling-n8n:5678",
+            "user-agent": "python-requests/2.32.4",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "authorization": "Bearer ...",
+            "content-type": "application/json",
+            "content-length": "121"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "sessionId": "84ea3797-fd3d-48a8-ab2b-b75ccc2d45f0",
+            "chatInput": "ask eliza agent about my wallet address and balance"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/a34cce78-31c2-474e-b88b-93ee2fabf276",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eliza Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cambrian Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Custom MCP Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sei MCP Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4b916afb-8174-4ba1-8359-c6f54381e45e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "mjlgsEtbOP3CJ8pM",
+  "tags": []
+}

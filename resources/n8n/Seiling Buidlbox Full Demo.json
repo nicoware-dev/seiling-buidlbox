@@ -1,0 +1,2417 @@
+{
+  "name": "Seiling Buidlbox Full Demo",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        912
+      ],
+      "id": "e8e38282-74bb-4144-8517-ac397656aacd",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4683aac4-7fb4-43ef-9e1f-d10eb2a1e946",
+              "leftValue": "={{ $json.network }}",
+              "rightValue": "testnet",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        384,
+        0
+      ],
+      "id": "82f91b37-17e7-443f-9ea7-368521ac0b8e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4176429-6260-43f9-9d93-84d5cf22415b",
+              "name": "network",
+              "value": "testnet",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        0
+      ],
+      "id": "d4d469db-e074-43b4-8232-398ff18987d9",
+      "name": "Set Network"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1002650a-76e7-4afb-866f-b84326f09aba",
+              "name": "Transaction Type",
+              "value": "All",
+              "type": "string"
+            },
+            {
+              "id": "d90cd052-bd6c-4dc8-90d5-78d08942ea66",
+              "name": "Recipient Address",
+              "value": "0xF12d64817029755853bc74a585EcD162f63c5f84",
+              "type": "string"
+            },
+            {
+              "id": "2ae8c736-ff27-4c93-bd7b-052a8d76d931",
+              "name": "Value",
+              "value": 0.0123456,
+              "type": "number"
+            },
+            {
+              "id": "4c512035-10a1-4ec3-aa62-5302be355c5c",
+              "name": "Sender Address",
+              "value": "0xf133FF0166A89aD9ab691a58385CDBd3590C7f28",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "3f643df1-5631-4308-9f3f-b8a79401ab82",
+      "name": "Set Tx Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02d3deec-48e4-41c7-8ffc-939c2fdb966c",
+              "name": "Custom RPC",
+              "value": "https://evm-rpc-testnet.sei-apis.com",
+              "type": "string"
+            },
+            {
+              "id": "11be5527-4c6c-44a1-8eef-7879ec7eaf48",
+              "name": "Explorer URL",
+              "value": "https://evm-rpc-testnet.sei-apis.com",
+              "type": "string"
+            },
+            {
+              "id": "a031b7be-9aad-44ea-9520-a1534d03430d",
+              "name": "Network",
+              "value": "sei-testnet",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        -96
+      ],
+      "id": "b267dea0-32b5-4ed9-9688-8b05865d2134",
+      "name": "Set Testnet Config"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02d3deec-48e4-41c7-8ffc-939c2fdb966c",
+              "name": "Custom RPC",
+              "value": "https://evm-rpc.sei-apis.com",
+              "type": "string"
+            },
+            {
+              "id": "ff44b7cb-1c61-46ca-a881-bd71a9814423",
+              "name": "Explorer URL",
+              "value": "https://evm-rpc.sei-apis.com",
+              "type": "string"
+            },
+            {
+              "id": "c71203ba-0e3a-4c03-8f78-49a9d38df4f4",
+              "name": "Network",
+              "value": "sei-mainnet",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        80
+      ],
+      "id": "6e0acaec-16e2-4bc5-a268-663db0909cfd",
+      "name": "Set Mainnet Config"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a256237b-e13c-49c1-a312-456bbfef6f07",
+              "name": "Custom RPC",
+              "value": "={{ $json['Custom RPC'] }}",
+              "type": "string"
+            },
+            {
+              "id": "472333bb-e941-40f5-8636-e51f9b63a212",
+              "name": "Explorer URL",
+              "value": "={{ $json['Explorer URL'] }}",
+              "type": "string"
+            },
+            {
+              "id": "04fac572-93a5-42cc-aecb-7a84ec77757e",
+              "name": "Recipient Address",
+              "value": "={{ $('Set Tx Data').item.json['Recipient Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "624530a7-8d19-4b98-ae65-4f1f972fe364",
+              "name": "Value",
+              "value": "={{ $('Set Tx Data').item.json.Value }}",
+              "type": "number"
+            },
+            {
+              "id": "66bd0b99-4e69-44da-a7e6-026fae26728d",
+              "name": "Sender Address",
+              "value": "={{ $('Set Tx Data').item.json['Sender Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2c929486-770b-41b3-a4ac-96e719d30486",
+              "name": "Transaction Type",
+              "value": "={{ $('Set Tx Data').item.json['Transaction Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d7ec2523-5479-4f5a-a6af-beefa6e47424",
+              "name": "Network",
+              "value": "={{ $json.Network }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        0
+      ],
+      "id": "3e51d8a5-3811-4347-a8c5-e7a90b6d0618",
+      "name": "Set Tx Config"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-sei.seiCompileContract",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        464
+      ],
+      "id": "080e6454-37af-4613-81e9-23ca21a3901d",
+      "name": "Compile Contract"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "queryType": "transactionDetails",
+        "transactionHash": "={{ $json.receipt.hash }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        96
+      ],
+      "id": "e50ea126-af81-4721-85b6-015b52268cb6",
+      "name": "Get Tx Details"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        656
+      ],
+      "id": "67e355d2-fe48-4412-8f95-e58ee367e069",
+      "name": "Get Block Info"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Deploy NFT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c6d6c1d3-54a4-4db0-8ab8-6ec1c03d61ae"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Deploy NFT"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a6467d23-0e6d-49c1-9507-f8d2d7a65fb9",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Deploy Token",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Deploy Token"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b37f8f87-5f67-4932-9697-c41e8c9e89f8",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Transfer SEI",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Transfer SEI"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "86558865-0b07-485d-8c58-8e56f804e0ae",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Transfer Token",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Transfer Token"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c5415390-5a46-4679-b84e-26fbbfe7c259",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Deploy Contract",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Deploy Contract"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7f56d8ff-07e2-48ff-afd8-3d5b7b269857",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "Get Info",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Get Info"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a41c114-82cf-4892-816b-25cb9b215492",
+                    "leftValue": "={{ $json['Transaction Type'] }}",
+                    "rightValue": "All",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "All"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1056,
+        -80
+      ],
+      "id": "9fa7043a-9808-4726-8ac6-5853a4ba6dce",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46d8f14b-587c-4d2b-9d43-93ef46d544b9",
+              "name": "Collection Name",
+              "value": "My NFT",
+              "type": "string"
+            },
+            {
+              "id": "4a49071a-d63d-40c2-8736-98c0919423d6",
+              "name": "Collection Symbol",
+              "value": "MNFT",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        -288
+      ],
+      "id": "5bb1c28d-b571-429d-b7b6-21670be36098",
+      "name": "Set NFT Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46d8f14b-587c-4d2b-9d43-93ef46d544b9",
+              "name": "Token Name",
+              "value": "My Token",
+              "type": "string"
+            },
+            {
+              "id": "4a49071a-d63d-40c2-8736-98c0919423d6",
+              "name": "Collection Symbol",
+              "value": "TOKEN",
+              "type": "string"
+            },
+            {
+              "id": "b2c2f5fc-32fe-4d5a-80ab-38eb9903004a",
+              "name": "Decimals",
+              "value": "18",
+              "type": "string"
+            },
+            {
+              "id": "07b8f7b8-2eb1-46d1-9ec3-de0aba3f1e5a",
+              "name": "Initial Supply",
+              "value": "1000000",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        -96
+      ],
+      "id": "6b9c024b-02bc-4cb2-8701-3865b2053bdd",
+      "name": "Set Token Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5a1a729b-49d7-4c5e-b8a5-5a00b790b7df",
+              "name": "Recipient Address",
+              "value": "={{ $('Set Tx Config').item.json[\"Recipient Address\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "6b6d2489-5485-4e83-9de8-61ab161bb9e7",
+              "name": "Sender Address",
+              "value": "={{ $('Set Tx Config').item.json[\"Sender Address\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d167cced-f601-4c6d-bff5-9edbfb38ec83",
+              "name": "Amount",
+              "value": "={{ $('Set Tx Config').item.json.Value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        272
+      ],
+      "id": "5d884a92-a4bf-414d-8af4-abceb3a5e0d3",
+      "name": "Set Token Transfer Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "81a2be8a-21e6-4f49-84fb-6293bfbe0bfc",
+              "name": "contractAddress",
+              "value": "0x72a134B8981f61C6F2DD8EB0dAfD561Eee618F8f",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        272
+      ],
+      "id": "993c9a0a-5d08-4fe3-92c1-752072e6029d",
+      "name": "Set Token"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": "={{ $json.value }}",
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}"
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        96
+      ],
+      "id": "b49bc127-dfec-4a07-8d4f-a28b90b65e47",
+      "name": "Execute Transfer Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $('Set Tx Config').item.json[\"Recipient Address\"] }}",
+        "value": "={{ $('Set Tx Config').item.json.Value }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        96
+      ],
+      "id": "6ac98a75-aad0-4ef8-95de-441b27d08e46",
+      "name": "Build Transfer Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "queryType": "accountBalance",
+        "accountAddress": "={{ $('Set Tx Config').item.json[\"Sender Address\"] }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        656
+      ],
+      "id": "3ca55972-d7f9-434b-97a3-ba915c4bd71e",
+      "name": "Get Account Balance"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy NFT",
+        "height": 80,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -352
+      ],
+      "id": "b4cc4a6d-b98b-4aa3-a5f2-34dea478c8d6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Mint NFT",
+        "height": 80,
+        "width": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -352
+      ],
+      "id": "91f8fa66-6e2b-40ce-9bf5-c175d4211333",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Get NFT Balance",
+        "height": 80,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2128,
+        -352
+      ],
+      "id": "22615f0b-783b-4e56-8faf-7a62c3c5ff79",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy Token",
+        "height": 80,
+        "width": 260,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -144
+      ],
+      "id": "c9ac112c-68ab-45b3-aff9-b7ddc6235b03",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Get Token Balance",
+        "height": 80,
+        "width": 340,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        -144
+      ],
+      "id": "0299fb90-1ab4-4b49-886f-921990056cf4",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# Transfer SEI",
+        "height": 80,
+        "width": 260,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        48
+      ],
+      "id": "bca3dd37-19db-4d68-88c6-9fd01b544fc5",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# Get Tx Details",
+        "height": 80,
+        "width": 260,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        32
+      ],
+      "id": "08504b88-355f-4404-a3d0-78dedb6681c6",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "# Transfer Token",
+        "height": 80,
+        "width": 280,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        208
+      ],
+      "id": "cd8e6190-145c-4442-8fe5-99ae90b9a316",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy Custom Contract",
+        "height": 80,
+        "width": 440,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1744,
+        464
+      ],
+      "id": "0e18ab66-2d99-4700-b4ed-16be265511c5",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "# Get Info",
+        "height": 80,
+        "width": 180,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1744,
+        672
+      ],
+      "id": "e18221e2-48c5-4292-9bb0-a18bb4a04e5e",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Set Mainnet/Testnet",
+        "height": 80,
+        "width": 260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -64
+      ],
+      "id": "3212f66c-3550-4c35-a3ff-1a1bd6908a4c",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Set Tx Data",
+        "height": 80,
+        "width": 160,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -64
+      ],
+      "id": "c9c8ab77-e8ff-45fc-bc0d-5159d54b6273",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "contractType": "erc721",
+        "erc721Name": "={{ $json['Collection Name'] }}",
+        "erc721Symbol": "={{ $json['Collection Symbol'] }}"
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        -288
+      ],
+      "id": "a7d1b9eb-85a1-4ab8-8cef-c7e5963c261a",
+      "name": "Deploy NFT",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $('Set Tx Config').item.json['Sender Address'] }}",
+        "value": 0,
+        "additionalFields": {
+          "contractAbi": "={{ $json.abi }}",
+          "contractAddress": "={{ $json.contractAddress }}",
+          "contractMethod": "=mint",
+          "contractArgs": {
+            "items": [
+              {
+                "value": "={{ $('Set Tx Config').item.json[\"Sender Address\"] }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -288
+      ],
+      "id": "e4ad9f53-7155-4ea7-a2f7-2b8bbf0ff545",
+      "name": "Build Mint NFT Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": 0,
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}"
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        -288
+      ],
+      "id": "53fd1620-5f47-499c-b66d-713313426abe",
+      "name": "Execute Mint NFT Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "queryType": "contractCall",
+        "contractAddress": "={{ $('Deploy NFT').item.json.contractAddress }}",
+        "contractAbi": "={{ $('Deploy NFT').item.json.abi }}",
+        "methodName": "balanceOf",
+        "methodArgs": {
+          "items": [
+            {
+              "value": "={{ $('Set Tx Config').item.json['Sender Address'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        -288
+      ],
+      "id": "078c01d9-5152-4893-9570-f889c2212e71",
+      "name": "Get NFT Balance"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "contractType": "erc20",
+        "erc20Name": "={{ $json[\"Token Name\"] }}",
+        "erc20Symbol": "={{ $json[\"Collection Symbol\"] }}",
+        "erc20Decimals": "={{ $json.Decimals }}",
+        "erc20Supply": "={{ $json[\"Initial Supply\"] }}"
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        -96
+      ],
+      "id": "c7c378d9-8c5a-4451-81ae-99d6307b3bed",
+      "name": "Deploy Token",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "queryType": "contractCall",
+        "contractAddress": "={{ $json.contractAddress }}",
+        "contractAbi": "={{ $json.abi }}",
+        "methodName": "balanceOf",
+        "methodArgs": {
+          "items": [
+            {
+              "value": "={{ $('Set Tx Config').item.json[\"Sender Address\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -96
+      ],
+      "id": "098080df-95b1-43bd-bddf-22cbbabca1e6",
+      "name": "Get Token Balance"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $json[\"Recipient Address\"] }}",
+        "value": 0,
+        "additionalFields": {
+          "contractAbi": "={{ $('Set Token').item.json.abi }}",
+          "contractAddress": "={{ $('Set Token').item.json.contractAddress }}",
+          "contractMethod": "=transfer",
+          "contractArgs": {
+            "items": [
+              {
+                "value": "={{ $json[\"Recipient Address\"] }}"
+              },
+              {
+                "value": "={{ $json.Amount }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        272
+      ],
+      "id": "9979fe57-24ef-4e13-8be9-b6408d181da2",
+      "name": "Build Transfer Token Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": "={{ $json.value }}",
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}",
+        "gasLimit": 50000
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        272
+      ],
+      "id": "5c8c9e5f-c336-4c01-b751-b8420cfaf832",
+      "name": "Execute Transfer Token Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "customAbi": "={{ $json.abi }}",
+        "customBytecode": "={{ $json.bytecode }}",
+        "customArgs": {
+          "items": [
+            {
+              "value": "={{ $json.contractName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        464
+      ],
+      "id": "2c8a9fa0-3707-4ed0-922a-21f07e0588a6",
+      "name": "Deploy Contract",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "queryType": "contractCall",
+        "contractAddress": "={{ $('Set Token').item.json.contractAddress }}",
+        "contractAbi": "={{ $('Set Token').item.json.abi }}",
+        "methodName": "=balaceOf",
+        "methodArgs": {
+          "items": [
+            {
+              "value": "={{ $('Set Token Transfer Data').item.json[\"Recipient Address\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        272
+      ],
+      "id": "eb1de669-5606-4740-b32e-c5ee297f77d3",
+      "name": "Get Balance"
+    },
+    {
+      "parameters": {
+        "connectionType": "http"
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        128,
+        608
+      ],
+      "id": "802bc84a-0448-4bb9-abf6-3248dbbe1b72",
+      "name": "List Tools",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_chain_info",
+        "toolParameters": "{\n  \"network\": \"sei-testnet\"\n}"
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        304,
+        160
+      ],
+      "id": "86fc0153-5e77-4c09-a872-dda1c37e5562",
+      "name": "Get Chain Info",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_supported_networks",
+        "toolParameters": "{\n}"
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        464,
+        240
+      ],
+      "id": "b7ee5775-2324-4e1d-a691-ef5167d275b3",
+      "name": "Get Supported Networks",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_latest_block",
+        "toolParameters": "={\n  \"network\": \"{{ $('Config').item.json.network }}\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        496,
+        400
+      ],
+      "id": "0aa55bc3-f9a0-47a4-a635-5860abe6d0e9",
+      "name": "Get Latest Block",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "093fcc40-822f-4c49-9903-8c60be164fb0",
+              "name": "network",
+              "value": "sei-testnet",
+              "type": "string"
+            },
+            {
+              "id": "f68513c2-45a3-4dcf-bcf3-d02c104e787f",
+              "name": "address",
+              "value": "0xF12d64817029755853bc74a585EcD162f63c5f84",
+              "type": "string"
+            },
+            {
+              "id": "30472f60-0246-420f-802a-eccec81e7bf2",
+              "name": "token_contract_address",
+              "value": "0x72a134B8981f61C6F2DD8EB0dAfD561Eee618F8f",
+              "type": "string"
+            },
+            {
+              "id": "af6ab668-d452-4127-b3c1-b367f2d6f5db",
+              "name": "amount",
+              "value": "0.012345",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -96,
+        608
+      ],
+      "id": "ebae64d3-cc0c-4704-9786-4ca0d3909182",
+      "name": "Config"
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_block_by_number",
+        "toolParameters": "={\n  \"blockNumber\": {{ JSON.parse($json.result.content[0].text).number }},\n  \"network\": \"sei-testnet\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        720,
+        336
+      ],
+      "id": "fc5c3f68-ac5c-4f47-aa69-89e2d90b7505",
+      "name": "Get Block By Number",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_erc20_balance",
+        "toolParameters": "={\n  \"address\": \"{{ $('Config').item.json.address }}\",  \n  \"tokenAddress\": \"{{ $('Config').item.json.token_contract_address }}\",\n  \"network\": \"{{ $('Config').item.json.network }}\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        880,
+        592
+      ],
+      "id": "808eb87f-7f17-4b85-9f95-1e2929bd469f",
+      "name": "Get ERC20 Balance",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_address_from_private_key",
+        "toolParameters": "={\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        640,
+        672
+      ],
+      "id": "86670e3e-e6c4-46ee-b7e7-c2275e9eb64a",
+      "name": "Get Address",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=transfer_erc20",
+        "toolParameters": "={ \n  \"tokenAddress\": \"{{ $('Config').item.json.token_contract_address }}\",\n  \"toAddress\": \"{{ $('Config').item.json.address }}\", \n  \"amount\": \"{{ $('Config').item.json.amount }}\", \n  \"network\": \"{{ $('Config').item.json.network }}\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        480,
+        784
+      ],
+      "id": "bba31456-1a96-4448-808c-b534838e1094",
+      "name": "Transfer Token",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=transfer_sei",
+        "toolParameters": "={ \n  \"to\": \"{{ $('Config').item.json.address }}\", \n  \"amount\": \"{{ $('Config').item.json.amount }}\", \n  \"network\": \"{{ $('Config').item.json.network }}\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        320,
+        896
+      ],
+      "id": "5877c2be-403f-4cba-8002-10ac40511744",
+      "name": "Transfer Sei",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "=get_balance",
+        "toolParameters": "={\n  \"address\": \"{{ $('Config').item.json.address }}\",\n  \"network\": \"{{ $('Config').item.json.network }}\"\n} "
+      },
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [
+        640,
+        496
+      ],
+      "id": "ef70c7d5-962e-4076-aa70-9f70ed4c2606",
+      "name": "Get Balance1",
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9904ac0d-6f50-4fe6-90e3-50724fcd324f",
+              "name": "message",
+              "value": "What's your wallet address and balance?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        1200
+      ],
+      "id": "100eee86-10d0-4e8b-b1b7-502be4cca004",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "http://seiling-eliza:3000/api/messaging/central-servers",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        1200
+      ],
+      "id": "aa73bf89-4633-461c-9da1-d51ba78ad22a",
+      "name": "Get Eliza Server"
+    },
+    {
+      "parameters": {
+        "url": "http://seiling-eliza:3000/api/agents",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        1200
+      ],
+      "id": "8aa1ceef-22a5-4473-894a-6367c24ed9fd",
+      "name": "List Agents"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-eliza:3000/api/messaging/channels",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "n8n_channel"
+            },
+            {
+              "name": "serverId",
+              "value": "={{ $('Get Eliza Server').item.json.data.servers[0].id }}"
+            },
+            {
+              "name": "description",
+              "value": "n8n chat"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        1200
+      ],
+      "id": "902e1275-244b-4ba8-b113-8740a9f731b6",
+      "name": "Create Channel"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://seiling-eliza:3000/api/messaging/central-channels/{{ $json.data.channel.id }}/agents ",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "agentId",
+              "value": "={{ $('List Agents').item.json.data.agents[0].id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        1200
+      ],
+      "id": "4d98882b-f267-4486-ab17-ee2ff8d6228d",
+      "name": "Add Agent To Channel"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-eliza:3000/api/messaging/submit",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channel_id\": {{ JSON.stringify($('Add Agent To Channel').item.json.data.channelId) }},\n  \"server_id\": {{ JSON.stringify($('Get Eliza Server').item.json.data.servers[0].id) }},\n  \"author_id\": {{ JSON.stringify($('Get Eliza Server').item.json.data.servers[0].id) }},\n  \"content\": \"{{ $('Edit Fields').item.json.message }}\",\n  \"source_type\": \"user_message\",\n  \"raw_message\": {},\n  \"metadata\": {\n\n    \"channelType\": \"DM\",\n\n    \"isDm\": true,\n\n    \"targetUserId\": \"{{ $json.data.agentId }}\"\n\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1056,
+        1200
+      ],
+      "id": "a8c6bd64-b2a4-4ec2-bd3a-5e22505f8657",
+      "name": "Send Message1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        1200
+      ],
+      "id": "21697d00-d85f-4702-be3f-d79b71eb281c",
+      "name": "Wait1",
+      "webhookId": "e07b8a4c-2000-4f2e-ac8c-6f20a6373f29"
+    },
+    {
+      "parameters": {
+        "url": "=http://seiling-eliza:3000/api/messaging/central-channels/{{ $json.data.channelId }}/messages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1504,
+        1200
+      ],
+      "id": "f8319238-167f-4e52-8a44-34dc0cfa62f2",
+      "name": "Get Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5dadbe10-8667-4711-a53d-639736f73bed",
+              "name": "response",
+              "value": "={{ $json.data.messages[0].content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1728,
+        1200
+      ],
+      "id": "75d313a9-909c-4939-b127-a24b69c3ad05",
+      "name": "Set Response"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-cambrian-agent:3000/api/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"What are the available tools in the DeFi ecosystem on the Sei Network?\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        912,
+        992
+      ],
+      "id": "9d2a51f8-6f90-4e37-9500-fd35b0958cee",
+      "name": "Message Cambrian Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c92d64f3-c4da-41a4-9ac1-61feec1540f6",
+              "name": "body.message",
+              "value": "=hello",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        688,
+        992
+      ],
+      "id": "ca3ae8ef-6b67-4586-8804-96442f12a0f1",
+      "name": "Set Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2891aa9f-3665-4d56-8fa1-8cacde23164a",
+              "name": "response",
+              "value": "={{ JSON.parse($json.data).text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        992
+      ],
+      "id": "004f8dd5-4007-41fc-a98b-d9014c62dce6",
+      "name": "Set Response1"
+    }
+  ],
+  "pinData": {
+    "Set Token": [
+      {
+        "json": {
+          "contractAddress": "0x07502bfDF9f79795aF467c9bF7EDFd4CFe3e28a4",
+          "transactionHash": "0x24a9fe61b7be11a1046583d90fa348785f7770e68ffe2bd26af7ebde30018ba5",
+          "contractType": "erc20",
+          "constructorArgs": [
+            "My Token",
+            "TOKEN",
+            "18",
+            "1000000"
+          ],
+          "abi": [
+            {
+              "inputs": [
+                {
+                  "internalType": "string",
+                  "name": "name_",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "symbol_",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "decimals_",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "initialSupply_",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "constructor"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                },
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "spender",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "value",
+                  "type": "uint256"
+                }
+              ],
+              "name": "Approval",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "from",
+                  "type": "address"
+                },
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "to",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "value",
+                  "type": "uint256"
+                }
+              ],
+              "name": "Transfer",
+              "type": "event"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "spender",
+                  "type": "address"
+                }
+              ],
+              "name": "allowance",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "spender",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
+                }
+              ],
+              "name": "approve",
+              "outputs": [
+                {
+                  "internalType": "bool",
+                  "name": "",
+                  "type": "bool"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "account",
+                  "type": "address"
+                }
+              ],
+              "name": "balanceOf",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "decimals",
+              "outputs": [
+                {
+                  "internalType": "uint8",
+                  "name": "",
+                  "type": "uint8"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "name",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "symbol",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "totalSupply",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "to",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
+                }
+              ],
+              "name": "transfer",
+              "outputs": [
+                {
+                  "internalType": "bool",
+                  "name": "",
+                  "type": "bool"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "from",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "to",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
+                }
+              ],
+              "name": "transferFrom",
+              "outputs": [
+                {
+                  "internalType": "bool",
+                  "name": "",
+                  "type": "bool"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            }
+          ],
+          "bytecode": "0x608060405234801561000f575f5ffd5b50604051610b8b380380610b8b83398101604081905261002e9161015c565b600361003a8582610263565b5060046100478482610263565b506005805460ff191660ff841617905561006282600a610416565b61006c908261042b565b6002819055335f8181526020818152604080832085905551938452919290917fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef910160405180910390a350505050610442565b634e487b7160e01b5f52604160045260245ffd5b5f82601f8301126100e2575f5ffd5b81516001600160401b038111156100fb576100fb6100bf565b604051601f8201601f19908116603f011681016001600160401b0381118282101715610129576101296100bf565b604052818152838201602001851015610140575f5ffd5b8160208501602083015e5f918101602001919091529392505050565b5f5f5f5f6080858703121561016f575f5ffd5b84516001600160401b03811115610184575f5ffd5b610190878288016100d3565b602087015190955090506001600160401b038111156101ad575f5ffd5b6101b9878288016100d3565b935050604085015160ff811681146101cf575f5ffd5b6060959095015193969295505050565b600181811c908216806101f357607f821691505b60208210810361021157634e487b7160e01b5f52602260045260245ffd5b50919050565b601f82111561025e57805f5260205f20601f840160051c8101602085101561023c5750805b601f840160051c820191505b8181101561025b575f8155600101610248565b50505b505050565b81516001600160401b0381111561027c5761027c6100bf565b6102908161028a84546101df565b84610217565b6020601f8211600181146102c2575f83156102ab5750848201515b5f19600385901b1c1916600184901b17845561025b565b5f84815260208120601f198516915b828110156102f157878501518255602094850194600190920191016102d1565b508482101561030e57868401515f19600387901b60f8161c191681555b50505050600190811b01905550565b634e487b7160e01b5f52601160045260245ffd5b6001815b600184111561036c578085048111156103505761035061031d565b600184161561035e57908102905b60019390931c928002610335565b935093915050565b5f8261038257506001610410565b8161038e57505f610410565b81600181146103a457600281146103ae576103ca565b6001915050610410565b60ff8411156103bf576103bf61031d565b50506001821b610410565b5060208310610133831016604e8410600b84101617156103ed575081810a610410565b6103f95f198484610331565b805f190482111561040c5761040c61031d565b0290505b92915050565b5f61042460ff841683610374565b9392505050565b80820281158282048414176104105761041061031d565b61073c8061044f5f395ff3fe608060405234801561000f575f5ffd5b5060043610610090575f3560e01c8063313ce56711610063578063313ce567146100fa57806370a082311461010f57806395d89b4114610137578063a9059cbb1461013f578063dd62ed3e14610152575f5ffd5b806306fdde0314610094578063095ea7b3146100b257806318160ddd146100d557806323b872dd146100e7575b5f5ffd5b61009c61018a565b6040516100a991906105cb565b60405180910390f35b6100c56100c036600461061b565b61021a565b60405190151581526020016100a9565b6002545b6040519081526020016100a9565b6100c56100f5366004610643565b610231565b60055460405160ff90911681526020016100a9565b6100d961011d36600461067d565b6001600160a01b03165f9081526020819052604090205490565b61009c610254565b6100c561014d36600461061b565b610263565b6100d961016036600461069d565b6001600160a01b039182165f90815260016020908152604080832093909416825291909152205490565b606060038054610199906106ce565b80601f01602080910402602001604051908101604052809291908181526020018280546101c5906106ce565b80156102105780601f106101e757610100808354040283529160200191610210565b820191905f5260205f20905b8154815290600101906020018083116101f357829003601f168201915b5050505050905090565b5f33610227818585610270565b5060019392505050565b5f3361023e858285610398565b610249858585610428565b506001949350505050565b606060048054610199906106ce565b5f33610227818585610428565b6001600160a01b0383166102d75760405162461bcd60e51b8152602060048201526024808201527f45524332303a20617070726f76652066726f6d20746865207a65726f206164646044820152637265737360e01b60648201526084015b60405180910390fd5b6001600160a01b0382166103385760405162461bcd60e51b815260206004820152602260248201527f45524332303a20617070726f766520746f20746865207a65726f206164647265604482015261737360f01b60648201526084016102ce565b6001600160a01b038381165f8181526001602090815260408083209487168084529482529182902085905590518481527f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925910160405180910390a3505050565b6001600160a01b038381165f908152600160209081526040808320938616835292905220545f19811461042257818110156104155760405162461bcd60e51b815260206004820152601d60248201527f45524332303a20696e73756666696369656e7420616c6c6f77616e636500000060448201526064016102ce565b6104228484848403610270565b50505050565b6001600160a01b03831661048c5760405162461bcd60e51b815260206004820152602560248201527f45524332303a207472616e736665722066726f6d20746865207a65726f206164604482015264647265737360d81b60648201526084016102ce565b6001600160a01b0382166104ee5760405162461bcd60e51b815260206004820152602360248201527f45524332303a207472616e7366657220746f20746865207a65726f206164647260448201526265737360e81b60648201526084016102ce565b6001600160a01b0383165f90815260208190526040902054818110156105655760405162461bcd60e51b815260206004820152602660248201527f45524332303a207472616e7366657220616d6f756e7420657863656564732062604482015265616c616e636560d01b60648201526084016102ce565b6001600160a01b038481165f81815260208181526040808320878703905593871680835291849020805487019055925185815290927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef910160405180910390a350505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b80356001600160a01b0381168114610616575f5ffd5b919050565b5f5f6040838503121561062c575f5ffd5b61063583610600565b946020939093013593505050565b5f5f5f60608486031215610655575f5ffd5b61065e84610600565b925061066c60208501610600565b929592945050506040919091013590565b5f6020828403121561068d575f5ffd5b61069682610600565b9392505050565b5f5f604083850312156106ae575f5ffd5b6106b783610600565b91506106c560208401610600565b90509250929050565b600181811c908216806106e257607f821691505b60208210810361070057634e487b7160e01b5f52602260045260245ffd5b5091905056fea264697066735822122038fcb873961a373b83ed454752b794244de43a8003ba9dda30dd98dde0f1170164736f6c634300081e0033",
+          "rpcUrl": "https://evm-rpc-testnet.sei-apis.com",
+          "chainId": "sei-testnet",
+          "timestamp": "2025-07-06T23:40:05.278Z",
+          "success": true
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Tx Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Set Testnet Config",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Mainnet Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Network": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Tx Data": {
+      "main": [
+        [
+          {
+            "node": "Set Network",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Testnet Config": {
+      "main": [
+        [
+          {
+            "node": "Set Tx Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Mainnet Config": {
+      "main": [
+        [
+          {
+            "node": "Set Tx Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Tx Config": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Contract": {
+      "main": [
+        [
+          {
+            "node": "Deploy Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Set NFT Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Token Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Transfer Tx",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Token",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Compile Contract",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Account Balance",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Account Balance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Compile Contract",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Transfer Tx",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Token Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set NFT Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set NFT Data": {
+      "main": [
+        [
+          {
+            "node": "Deploy NFT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Token Data": {
+      "main": [
+        [
+          {
+            "node": "Deploy Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Token Transfer Data": {
+      "main": [
+        [
+          {
+            "node": "Build Transfer Token Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Token": {
+      "main": [
+        [
+          {
+            "node": "Set Token Transfer Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Transfer Tx": {
+      "main": [
+        [
+          {
+            "node": "Get Tx Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Transfer Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Transfer Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Account Balance": {
+      "main": [
+        [
+          {
+            "node": "Get Block Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy NFT": {
+      "main": [
+        [
+          {
+            "node": "Build Mint NFT Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Mint NFT Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Mint NFT Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Mint NFT Tx": {
+      "main": [
+        [
+          {
+            "node": "Get NFT Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy Token": {
+      "main": [
+        [
+          {
+            "node": "Get Token Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Transfer Token Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Transfer Token Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Transfer Token Tx": {
+      "main": [
+        [
+          {
+            "node": "Get Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Tools": {
+      "main": [
+        [
+          {
+            "node": "Get Chain Info",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Supported Networks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Latest Block",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Balance1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get ERC20 Balance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Address",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Transfer Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Transfer Sei",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Latest Block": {
+      "main": [
+        [
+          {
+            "node": "Get Block By Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "List Tools",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get Eliza Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Eliza Server": {
+      "main": [
+        [
+          {
+            "node": "List Agents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Agents": {
+      "main": [
+        [
+          {
+            "node": "Create Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Channel": {
+      "main": [
+        [
+          {
+            "node": "Add Agent To Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Agent To Channel": {
+      "main": [
+        [
+          {
+            "node": "Send Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Message1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Get Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Response": {
+      "main": [
+        [
+          {
+            "node": "Set Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Response": {
+      "main": [
+        []
+      ]
+    },
+    "Message Cambrian Agent": {
+      "main": [
+        [
+          {
+            "node": "Set Response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Message": {
+      "main": [
+        [
+          {
+            "node": "Message Cambrian Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Response1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "08db2b8d-d8bf-44f5-be9d-eea47c16b12d",
+  "meta": {
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "M8XLFU2nQFol4ICi",
+  "tags": []
+}

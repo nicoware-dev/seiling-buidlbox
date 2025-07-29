@@ -1,0 +1,234 @@
+{
+  "name": "Sei MCP Agent Example",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -64,
+        -112
+      ],
+      "id": "3f4d2ad8-688d-4b63-8199-ac6a03beb6cd",
+      "name": "When chat message received",
+      "webhookId": "468eef08-06b5-4b32-bc25-7c53b60f44d0"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "You are a Sei Network AI Assistant. You can use the MCP Clients to List Tools and then to Execute Tools.\n\n\nTo get your address (user's address) just call the \"get_address_from_private_key\" tool (private key is set as env variable on the server) with no parameters.\n\n\nAlways list tools to get tools names and its input json properties before executing tools.",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        272,
+        0
+      ],
+      "id": "1eb2ad90-23c6-4a85-a83b-966eb89f0f16",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        224
+      ],
+      "id": "894be495-d504-44ad-abd4-1b1f311bd497",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "kfdzhAZV8PEk08b6",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use MCP client to call execute tools",
+        "connectionType": "http",
+        "operation": "executeTool",
+        "toolName": "={{ $fromAI('Tool_Name', `Name of the tool to call using this format get_supported_networks, get_balance`, 'string') }}",
+        "toolParameters": "={{ $fromAI('Tool_Parameters', `Tool Call Paramenters / Arguments, include all required arguments in json format with keys suck as address, tokenAddress, network and others`, 'string') }}"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        544,
+        224
+      ],
+      "id": "5183a7b3-e524-4327-9f94-670cf144fe03",
+      "name": "Execute Tools",
+      "retryOnFail": true,
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        224
+      ],
+      "id": "72d6cfc9-0890-42d1-a08f-c1dee1d2c6ae",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this MCP client to list tools and required parameters",
+        "connectionType": "http"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        416,
+        224
+      ],
+      "id": "c4e957ec-31e7-41bf-9229-c2f8781a9e80",
+      "name": "List Tools1",
+      "retryOnFail": false,
+      "credentials": {
+        "mcpClientHttpApi": {
+          "id": "HFEu6To38e9Sx3Ta",
+          "name": "Seiling Sei MCP Server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d6ac414f-311c-4b0e-ae36-a83d7fd8966f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        128
+      ],
+      "id": "4aa45598-904c-479e-a990-ffe5aa924293",
+      "name": "Webhook",
+      "webhookId": "d6ac414f-311c-4b0e-ae36-a83d7fd8966f"
+    },
+    {
+      "parameters": {
+        "content": "\n# **Sei MCP Agent Workflow**\n\nThis workflow creates an AI-powered agent for the Sei Network using MCP tools and OpenAI. The agent can list available tools and execute them based on chat input, enabling dynamic blockchain interactions.\n\n## **Credentials:** \nMCP Client HTTP, OpenAI\n\n## **Setup:** \nAdd your MCP and OpenAI credentials in n8n. No further configuration needed.\n\n## **How to Use:** \nSend a chat message to the agent (e.g., \"Get my SEI balance\"). The agent will list tools, pick the right one, and execute it.\n\n## **Tip:** \nThe agent uses your server's private key for address-related actions. Never share your private key.\n",
+        "height": 560,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -208
+      ],
+      "id": "809bedcb-d32c-4492-b839-b4cd6e1209c3",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Tools1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9649702e-8aca-4b87-8322-543c700519e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "tFQDxOch6HFMIUkH",
+  "tags": []
+}

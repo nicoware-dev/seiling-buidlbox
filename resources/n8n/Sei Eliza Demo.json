@@ -1,0 +1,362 @@
+{
+  "name": "Sei Eliza Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "92a6b722-441c-4955-b9e4-7e02b5d3af85",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ed19e605-b301-4ff1-9acf-b3c4c39b0f24",
+      "name": "Webhook",
+      "webhookId": "92a6b722-441c-4955-b9e4-7e02b5d3af85"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9904ac0d-6f50-4fe6-90e3-50724fcd324f",
+              "name": "message",
+              "value": "What's your wallet address and balance?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "fbdb7325-08df-42f1-ae07-1a44842eb669",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "http://seiling-eliza:3000/api/messaging/central-servers",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "64908eac-c6ab-4c26-9f04-ce203179edbf",
+      "name": "Get Eliza Server"
+    },
+    {
+      "parameters": {
+        "url": "http://seiling-eliza:3000/api/agents",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "6db7e721-7942-4518-b52e-6fb65dabb7e8",
+      "name": "List Agents"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-eliza:3000/api/messaging/channels",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "n8n_channel"
+            },
+            {
+              "name": "serverId",
+              "value": "={{ $('Get Eliza Server').item.json.data.servers[0].id }}"
+            },
+            {
+              "name": "description",
+              "value": "n8n chat"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "147bb6ad-5a4e-4fa2-95a5-8b5106b6bc63",
+      "name": "Create Channel"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://seiling-eliza:3000/api/messaging/central-channels/{{ $json.data.channel.id }}/agents ",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "agentId",
+              "value": "={{ $('List Agents').item.json.data.agents[0].id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "0570e432-b61d-4472-8593-0d5cc2e2bf1b",
+      "name": "Add Agent To Channel"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-eliza:3000/api/messaging/submit",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channel_id\": {{ JSON.stringify($('Add Agent To Channel').item.json.data.channelId) }},\n  \"server_id\": {{ JSON.stringify($('Get Eliza Server').item.json.data.servers[0].id) }},\n  \"author_id\": {{ JSON.stringify($('Get Eliza Server').item.json.data.servers[0].id) }},\n  \"content\": \"{{ $('Edit Fields').item.json.message }}\",\n  \"source_type\": \"user_message\",\n  \"raw_message\": {},\n  \"metadata\": {\n\n    \"channelType\": \"DM\",\n\n    \"isDm\": true,\n\n    \"targetUserId\": \"{{ $json.data.agentId }}\"\n\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1328,
+        0
+      ],
+      "id": "b8fa9e3a-a047-4668-89a6-894488aa8ae3",
+      "name": "Send Message1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1552,
+        0
+      ],
+      "id": "0f0fe169-d112-42b6-8783-de22b61ea265",
+      "name": "Wait1",
+      "webhookId": "e07b8a4c-2000-4f2e-ac8c-6f20a6373f29"
+    },
+    {
+      "parameters": {
+        "url": "=http://seiling-eliza:3000/api/messaging/central-channels/{{ $json.data.channelId }}/messages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        0
+      ],
+      "id": "5cf93961-1c5a-4551-aac9-cef0768605cd",
+      "name": "Get Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5dadbe10-8667-4711-a53d-639736f73bed",
+              "name": "response",
+              "value": "={{ $json.data.messages[0].content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1984,
+        0
+      ],
+      "id": "181f34c3-620f-4c40-bfe8-b480b6de807e",
+      "name": "Set Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2208,
+        0
+      ],
+      "id": "8ad87235-94f4-4795-ae0c-7e81427c5f0b",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "\n# **Message Eliza Agent Workflow**\n\nHandles messaging with the Eliza agent for wallet address, balance queries, and SEI transfers. Automates the process of creating channels, adding agents, sending messages, and retrieving responses.\n\n## **Credentials:** \nNone required (uses HTTP requests to Eliza server)\n\n## **Setup:** \nEnsure Eliza server endpoints are correct in the HTTP Request nodes.\n\n## **How to Use:** \nSend a POST request to the webhook with your message. The workflow manages the conversation and returns the agent's response.\n\n## **Tip:** \nUseful for integrating conversational wallet and transfer features into other workflows.",
+        "height": 560,
+        "width": 608
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        192
+      ],
+      "id": "7baf381f-9367-4866-aa9f-cab9be15f03d",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Eliza Server": {
+      "main": [
+        [
+          {
+            "node": "List Agents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Agents": {
+      "main": [
+        [
+          {
+            "node": "Create Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Channel": {
+      "main": [
+        [
+          {
+            "node": "Add Agent To Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Agent To Channel": {
+      "main": [
+        [
+          {
+            "node": "Send Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Message1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get Eliza Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Get Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Response": {
+      "main": [
+        [
+          {
+            "node": "Set Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2b764d91-5252-4ae6-949e-09de111b825f",
+  "meta": {
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "lZTu8SKlrBmfbSVT",
+  "tags": []
+}
