@@ -1,0 +1,1759 @@
+{
+  "name": "Custom Sei MCP Server",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "9f7905e3-b1b6-454a-a51f-67cbd1471009"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        528,
+        128
+      ],
+      "id": "5f70c9fa-d758-4984-8be2-58d6d3f740ce",
+      "name": "MCP Server Trigger",
+      "webhookId": "9f7905e3-b1b6-454a-a51f-67cbd1471009"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Webhook').item.json.body.network }}",
+        "queryType": "transactionDetails",
+        "transactionHash": "={{ $json.receipt.hash }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        800,
+        592
+      ],
+      "id": "f8e87a1f-78a4-4b21-b8dc-6e74d6544c1b",
+      "name": "Get Tx Details"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Set Tx Config').item.json.Network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": "={{ $json.value }}",
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}"
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        576,
+        592
+      ],
+      "id": "743d275e-25c8-41ae-ab19-845239acdbec",
+      "name": "Execute Transfer Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "recipient": "={{ $json.body.address }}",
+        "value": "={{ $json.body.amount }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        352,
+        592
+      ],
+      "id": "9a755b9d-33b7-40c9-8799-a26a4aefa345",
+      "name": "Build Transfer Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "transfer-sei",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        592
+      ],
+      "id": "60bb57ef-f6c1-41fa-981b-9eb1f8707414",
+      "name": "Webhook",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1024,
+        592
+      ],
+      "id": "8df4b138-15af-4b60-a54d-1c7426b00a5a",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "sourceCode": "={{ $json.body.contract_source_code }}",
+        "contractName": "={{ $json.body.contract_name }}"
+      },
+      "type": "n8n-nodes-sei.seiCompileContract",
+      "typeVersion": 1,
+      "position": [
+        352,
+        2400
+      ],
+      "id": "b966ec1c-6fba-4cb9-afdc-3500ae70506a",
+      "name": "Compile Contract"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Webhook9').item.json.body.network }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        800,
+        2672
+      ],
+      "id": "c0e8e433-9aed-4a3e-8f4c-e9464858f9f3",
+      "name": "Get Block Info"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "queryType": "accountBalance",
+        "accountAddress": "={{ $json.body.address }}"
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        352,
+        2672
+      ],
+      "id": "22e6a4f1-1905-42d2-9d89-03b598b63978",
+      "name": "Get Account Balance"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy NFT",
+        "height": 240,
+        "width": 1000
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        768
+      ],
+      "id": "349828f7-9364-4eb9-87bc-49ec87dac2e8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Mint NFT",
+        "height": 200,
+        "width": 1080
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        1072
+      ],
+      "id": "f2f78930-4078-4647-b89b-65b22a129e45",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Get NFT Balance",
+        "height": 240,
+        "width": 900
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        1280
+      ],
+      "id": "03826a42-b30a-45d2-914a-e7b3a8bf0b73",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy Token",
+        "height": 220,
+        "width": 820,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        1824
+      ],
+      "id": "29496a49-9e3a-41ec-84e1-7832412a116d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Get Token Balance",
+        "height": 220,
+        "width": 900,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        1568
+      ],
+      "id": "c60a2d70-fbb7-4c57-a157-d5782e762d86",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# Transfer SEI",
+        "height": 280,
+        "width": 1220,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        16,
+        464
+      ],
+      "id": "d78eab30-e936-4d8f-b934-f978aed46a1a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# Transfer Token",
+        "height": 240,
+        "width": 1040,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        2064
+      ],
+      "id": "5649e818-d529-4822-9910-223f062de9e5",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "# Deploy Custom Contract",
+        "height": 220,
+        "width": 1080,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        2352
+      ],
+      "id": "ce3cc9f2-01ab-40a4-97d0-4b506e91d26a",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "# Get Wallet Info",
+        "height": 260,
+        "width": 1340,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        64,
+        2560
+      ],
+      "id": "beb76fd8-a81b-4805-9a08-364287894d13",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "contractType": "erc721",
+        "erc721Name": "={{ $json.body.collection_name }}",
+        "erc721Symbol": "={{ $json.body.collection_symbol }}"
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        352,
+        848
+      ],
+      "id": "649cd380-60d6-4523-a06c-59a79f030279",
+      "name": "Deploy NFT",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "recipient": "={{ $json.body.to_address }}",
+        "value": 0,
+        "additionalFields": {
+          "contractAbi": "=[{\"inputs\": [{\"internalType\": \"string\", \"name\": \"name_\", \"type\": \"string\"},{\"internalType\": \"string\", \"name\": \"symbol_\", \"type\": \"string\"}], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"approved\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"Approval\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\"}], \"name\": \"ApprovalForAll\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"Transfer\", \"type\": \"event\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"approve\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"}], \"name\": \"balanceOf\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"getApproved\", \"outputs\": [{\"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"}], \"name\": \"isApprovedForAll\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"}], \"name\": \"mint\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"name\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"ownerOf\", \"outputs\": [{\"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"},{\"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\"}], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"},{\"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\"}], \"name\": \"setApprovalForAll\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"bytes4\", \"name\": \"interfaceId\", \"type\": \"bytes4\"}], \"name\": \"supportsInterface\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"symbol\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"tokenURI\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"transferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"}]",
+          "contractAddress": "={{ $json.body.contract_address }}",
+          "contractMethod": "=mint",
+          "contractArgs": {
+            "items": [
+              {
+                "value": "={{ $json.body.to_address }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1104
+      ],
+      "id": "c178e38a-a8f1-4ddc-b86c-c8e21fff3294",
+      "name": "Build Mint NFT Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Webhook2').item.json.body.network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": 0,
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}"
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        576,
+        1104
+      ],
+      "id": "5f2e0bf3-8eb1-4ac9-a543-ee69cb512a1a",
+      "name": "Execute Mint NFT Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "queryType": "contractCall",
+        "contractAddress": "={{ $json.body.contract_address }}",
+        "contractAbi": "[{\"inputs\": [{\"internalType\": \"string\", \"name\": \"name_\", \"type\": \"string\"},{\"internalType\": \"string\", \"name\": \"symbol_\", \"type\": \"string\"}], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"approved\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"Approval\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\"}], \"name\": \"ApprovalForAll\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"Transfer\", \"type\": \"event\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"approve\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"}], \"name\": \"balanceOf\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"getApproved\", \"outputs\": [{\"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"}], \"name\": \"isApprovedForAll\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"}], \"name\": \"mint\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"name\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"ownerOf\", \"outputs\": [{\"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"},{\"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\"}], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\"},{\"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\"}], \"name\": \"setApprovalForAll\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"bytes4\", \"name\": \"interfaceId\", \"type\": \"bytes4\"}], \"name\": \"supportsInterface\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"symbol\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"tokenURI\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\"}], \"name\": \"transferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\"}]",
+        "methodName": "balanceOf",
+        "methodArgs": {
+          "items": [
+            {
+              "value": "={{ $json.body.address }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1360
+      ],
+      "id": "d86a682c-9531-4337-8661-3d2aaf3c45b7",
+      "name": "Get NFT Balance"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "contractType": "erc20",
+        "erc20Name": "={{ $json.body.token_name }}",
+        "erc20Symbol": "={{ $json.body.token_symbol }}",
+        "erc20Decimals": "={{ $json.body.decimals }}",
+        "erc20Supply": "={{ $json.body.initial_supply }}"
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1888
+      ],
+      "id": "eccb5d8f-05e4-4b08-accc-d6fa16e65c96",
+      "name": "Deploy Token",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "queryType": "contractCall",
+        "contractAddress": "={{ $json.body.contract_address }}",
+        "contractAbi": "[{\"inputs\": [{\"internalType\": \"string\", \"name\": \"name_\", \"type\": \"string\"},{\"internalType\": \"string\", \"name\": \"symbol_\", \"type\": \"string\"},{\"internalType\": \"uint8\", \"name\": \"decimals_\", \"type\": \"uint8\"},{\"internalType\": \"uint256\", \"name\": \"initialSupply_\", \"type\": \"uint256\"}], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\"}], \"name\": \"Approval\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\"}], \"name\": \"Transfer\", \"type\": \"event\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"}], \"name\": \"allowance\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"approve\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\"}], \"name\": \"balanceOf\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"decimals\", \"outputs\": [{\"internalType\": \"uint8\", \"name\": \"\", \"type\": \"uint8\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"name\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"symbol\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"totalSupply\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"transfer\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"transferFrom\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"}]",
+        "methodName": "balanceOf",
+        "methodArgs": {
+          "items": [
+            {
+              "value": "={{ $json.body.address }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiExplorer",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1632
+      ],
+      "id": "6c3b137e-b29a-410a-ae6c-282041cfd9a7",
+      "name": "Get Token Balance"
+    },
+    {
+      "parameters": {
+        "chain": "={{ $json.body.network }}",
+        "recipient": "={{ $json.body.destination_address }}",
+        "value": 0,
+        "additionalFields": {
+          "contractAbi": "=[{\"inputs\": [{\"internalType\": \"string\", \"name\": \"name_\", \"type\": \"string\"},{\"internalType\": \"string\", \"name\": \"symbol_\", \"type\": \"string\"},{\"internalType\": \"uint8\", \"name\": \"decimals_\", \"type\": \"uint8\"},{\"internalType\": \"uint256\", \"name\": \"initialSupply_\", \"type\": \"uint256\"}], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\"}], \"name\": \"Approval\", \"type\": \"event\"},{\"anonymous\": false, \"inputs\": [{\"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\"}], \"name\": \"Transfer\", \"type\": \"event\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"}], \"name\": \"allowance\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"approve\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\"}], \"name\": \"balanceOf\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"decimals\", \"outputs\": [{\"internalType\": \"uint8\", \"name\": \"\", \"type\": \"uint8\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"name\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"symbol\", \"outputs\": [{\"internalType\": \"string\", \"name\": \"\", \"type\": \"string\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [], \"name\": \"totalSupply\", \"outputs\": [{\"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"}], \"stateMutability\": \"view\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"transfer\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"},{\"inputs\": [{\"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\"},{\"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\"},{\"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\"}], \"name\": \"transferFrom\", \"outputs\": [{\"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\"}], \"stateMutability\": \"nonpayable\", \"type\": \"function\"}]",
+          "contractAddress": "={{ $json.body.contract_address }}",
+          "contractMethod": "=transfer",
+          "contractArgs": {
+            "items": [
+              {
+                "value": "={{ $json.body.destination_address }}"
+              },
+              {
+                "value": "={{ $json.body.amount }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-sei.seiTxBuilder",
+      "typeVersion": 1,
+      "position": [
+        352,
+        2144
+      ],
+      "id": "5cbdd362-9a7a-4bf2-a0f7-217442e7db89",
+      "name": "Build Transfer Token Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Webhook6').item.json.body.network }}",
+        "recipient": "={{ $json.recipient }}",
+        "value": "={{ $json.value }}",
+        "nonce": "={{ $json.nonce }}",
+        "calldata": "={{ $json.data }}",
+        "gasLimit": 50000
+      },
+      "type": "n8n-nodes-sei.seiTxExecutor",
+      "typeVersion": 1,
+      "position": [
+        576,
+        2144
+      ],
+      "id": "3d0a39ec-39e5-415a-b115-129daa38ae6c",
+      "name": "Execute Transfer Token Tx",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chain": "={{ $('Webhook8').item.json.body.network }}",
+        "customAbi": "={{ $json.abi }}",
+        "customBytecode": "={{ $json.bytecode }}",
+        "customArgs": {
+          "items": [
+            {
+              "value": "={{ $json.contractName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-sei.seiDeployContract",
+      "typeVersion": 1,
+      "position": [
+        576,
+        2400
+      ],
+      "id": "1169816a-73e4-436f-be2c-af5a1ecc6559",
+      "name": "Deploy Contract",
+      "credentials": {
+        "seiApi": {
+          "id": "lr4RJ9uP2cyEXvzB",
+          "name": "Seiling Buidlbox Sei  Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "deploy-nft",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        848
+      ],
+      "id": "610dd375-671a-4ee7-9898-f6b9144559a0",
+      "name": "Webhook1",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        848
+      ],
+      "id": "a6886619-e69a-4a1b-9d33-76b94061f61e",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mint-nft",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        1104
+      ],
+      "id": "3ceabcf4-ea09-4220-805e-eea0c9af7cf6",
+      "name": "Webhook2",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        800,
+        1104
+      ],
+      "id": "f1fa8d9a-57d1-4c27-bc45-80c40be99346",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-nft-balance",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        1360
+      ],
+      "id": "60d812c2-2a32-4a53-9bd0-a32f38cb703e",
+      "name": "Webhook3",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        1360
+      ],
+      "id": "f721e5fb-3579-4b0a-bc3d-765533ea69c6",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-token-balance",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        1632
+      ],
+      "id": "d2d97f3f-186b-480f-9b27-53038cf5db53",
+      "name": "Webhook4",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        1632
+      ],
+      "id": "efe48f15-41fa-4b93-b879-a6f36265da13",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "deploy-token",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        1888
+      ],
+      "id": "3562bd17-84a6-4dd6-9680-e46b767a432e",
+      "name": "Webhook5",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        1888
+      ],
+      "id": "8200b4ea-5eae-4858-af27-d2b74185208c",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "transfer-token",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        2144
+      ],
+      "id": "de3c293a-9f2c-487a-83ec-0eb469e1c99d",
+      "name": "Webhook6",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        800,
+        2144
+      ],
+      "id": "b7e6da6c-0a9c-4190-b8b2-cb65f2e5010e",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "deploy-contract",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        2400
+      ],
+      "id": "0f918be9-32fa-4970-9621-99d6c23f0fc3",
+      "name": "Webhook8",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        800,
+        2400
+      ],
+      "id": "b71ff059-71cf-4356-b1f4-2a0d4b091675",
+      "name": "Respond to Webhook8"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-info",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        2672
+      ],
+      "id": "01574bd6-5d0f-4393-a375-923d03cc9ebc",
+      "name": "Webhook9",
+      "webhookId": "eb833066-810e-40c6-bf06-78d45ea6b223"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1232,
+        2672
+      ],
+      "id": "fd0e3c81-70af-498b-86af-7db42f6d276e",
+      "name": "Respond to Webhook9"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to mint NFTs",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/mint-nft",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "to_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `destination address`, 'string') }}"
+            },
+            {
+              "name": "contract_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `NFT smart contract address`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        144,
+        352
+      ],
+      "id": "c2cf1125-38d9-4cf7-b26a-1282a8ae1920",
+      "name": "Mint NFTs Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to Deploy NFTs",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/deploy-nft",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "collection_symbol",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `collection_symbol`, 'string') }}"
+            },
+            {
+              "name": "collection_name",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `collection_name`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        256,
+        352
+      ],
+      "id": "c7a97631-dc9c-4607-8fbf-6cfc0b8e779b",
+      "name": "Deploy NFT Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to transfer SEI",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/transfer-sei",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "amount",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `amount`, 'string') }}"
+            },
+            {
+              "name": "address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `address`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        352
+      ],
+      "id": "cb49955c-fe72-4db7-91ee-85d1f0879e34",
+      "name": "Transfer SEI Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to Get Token Balance",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/get-token-balance",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `address of the account to fetch balance from`, 'string') }}"
+            },
+            {
+              "name": "contract_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `The token Smart Contract Address`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        352
+      ],
+      "id": "6db5936e-8bc5-47e1-8403-10cb6c3b3217",
+      "name": "Get Token Balance Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to deploy a token",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/deploy-token",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "token_name",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Name of the token to deploy`, 'string') }}"
+            },
+            {
+              "name": "token_symbol",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Symbol of the token to deploy`, 'string') }}"
+            },
+            {
+              "name": "initial_supply",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Initial supply of tokens.`, 'string') }}"
+            },
+            {
+              "name": "decimals",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Amount of decimal (Standard is 18)`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        352
+      ],
+      "id": "e93f1541-19c2-4d6b-85a6-2916de61642e",
+      "name": "Deploy Token Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to transfer tokens (ERC20)",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/transfer-token",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "amount",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `amount of tokens to be transfered`, 'string') }}"
+            },
+            {
+              "name": "destination_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Destination address`, 'string') }}"
+            },
+            {
+              "name": "smart_contract_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `The address of the smart contract of the Token to be transfered.`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        736,
+        352
+      ],
+      "id": "dd4ae949-3ca6-4e5e-8d7d-ede8c4b27bc5",
+      "name": "Transfer Token Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to deploy a custom contract",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/deploy-contract",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "contract_name",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Name for the contract to be deployed`, 'string') }}"
+            },
+            {
+              "name": "contract_source_code",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `The code of the smart contract (In Solidity)`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        352
+      ],
+      "id": "d2b4126b-dc2d-4015-b6f8-4174bbbb43ef",
+      "name": "Deploy Custom Contract Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to get info from an account",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/get-info",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `address of the account to get info from`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        976,
+        352
+      ],
+      "id": "9d40ff05-6066-4e2e-863c-15befff5b52d",
+      "name": "Get Info Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to mint NFTs",
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/get-nft-balance",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "network",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `network. Can be sei-testnet or sei-mainnet`, 'string') }}"
+            },
+            {
+              "name": "address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `address of the account to fetch balance from`, 'string') }}"
+            },
+            {
+              "name": "contract_address",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `NFT smart contract address`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1104,
+        352
+      ],
+      "id": "d7711709-fa21-49bf-b35f-a3c44dee495d",
+      "name": "Get NFT Balance Tool"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e32fb85b-3bd9-4222-bc5b-93f25d5ecca7",
+              "name": "balance_sei",
+              "value": "={{ $('Format Balance').item.json.balance_sei }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        2672
+      ],
+      "id": "4ac01d97-bad3-44c9-b6d2-743059557aa2",
+      "name": "Set Results"
+    },
+    {
+      "parameters": {
+        "jsCode": "const balanceWei = parseInt($input.first().json.result.balance, 16);\nconst balanceSei = balanceWei / Math.pow(10, 18);\n\nreturn [{ json: { balance_wei: balanceWei, balance_sei: balanceSei } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        2672
+      ],
+      "id": "3973fc7f-f182-43fd-bbd3-1376d4d5aa48",
+      "name": "Format Balance"
+    },
+    {
+      "parameters": {
+        "content": "# Custom Sei MCP Server\n",
+        "height": 480,
+        "width": 1300,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "47ca17b6-1c23-40ca-9522-6a53364d418f",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "\n# **Custom Sei MCP Server Workflow**\n\nProvides a set of HTTP endpoints for interacting with the Sei blockchain: deploy/mint NFTs, deploy/transfer tokens, get balances, and more. Designed for integration with external services or agents.\n\n## **Credentials:** \nSei account (set up in n8n credentials)\n\n## **Setup:** \nConfigure your Sei account credentials. Endpoints are ready to use for POST requests.\n\n## **How to Use:** \nCall the relevant HTTP endpoint (e.g., `/deploy-nft`, `/transfer-sei`) with the required parameters to perform blockchain actions.\n\n## **Tip:** \nReview each endpoint's parameters and test on testnet before using mainnet.",
+        "height": 608,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -32
+      ],
+      "id": "132f3357-74aa-4976-9253-41389cb30de5",
+      "name": "Sticky Note6"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "98",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "amount": "0.0123",
+            "address": "0xF12d64817029755853bc74a585EcD162f63c5f84"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/eb833066-810e-40c6-bf06-78d45ea6b223",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "91",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "collection_symbol": "MYNFT",
+            "collection_name": "My NFT Collection"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/deploy-nft",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook2": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "147",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "to_address": "0xF12d64817029755853bc74a585EcD162f63c5f84",
+            "contract_address": "0x0bF058b8119CE8788054101F3C217e96AbDbBf4A"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/mint-nft",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook3": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "144",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "address": "0xF12d64817029755853bc74a585EcD162f63c5f84",
+            "contract_address": "0x0bF058b8119CE8788054101F3C217e96AbDbBf4A"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/get-nft-balance",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook4": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "144",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "address": "0xf133FF0166A89aD9ab691a58385CDBd3590C7f28",
+            "contract_address": "0x90497F5001AA0fffe933F8dcBD9D858C2a62f880"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/get-token-balance",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook5": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "112",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "token_name": "MyToken",
+            "token_symbol": "MTK",
+            "initial_supply": "1000000",
+            "decimals": "18"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/deploy-token",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook6": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "98",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "amount": "0.0123",
+            "address": "0xF12d64817029755853bc74a585EcD162f63c5f84"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/eb833066-810e-40c6-bf06-78d45ea6b223",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook8": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "354",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "contract_name": "MyContract",
+            "contract_source_code": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.19;\n\ncontract MyContract {\n    string public name;\n    \n    constructor(string memory _name) {\n        name = _name;\n    }\n    \n    function setName(string memory _name) public {\n        name = _name;\n    }\n}"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/deploy-contract",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook9": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "80",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "network": "sei-testnet",
+            "address": "0xF12d64817029755853bc74a585EcD162f63c5f84"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/get-info",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Transfer Tx": {
+      "main": [
+        [
+          {
+            "node": "Get Tx Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Transfer Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Transfer Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build Transfer Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Tx Details": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Contract": {
+      "main": [
+        [
+          {
+            "node": "Deploy Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Account Balance": {
+      "main": [
+        [
+          {
+            "node": "Format Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy NFT": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Mint NFT Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Mint NFT Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Mint NFT Tx": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy Token": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Transfer Token Tx": {
+      "main": [
+        [
+          {
+            "node": "Execute Transfer Token Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Transfer Token Tx": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook9": {
+      "main": [
+        [
+          {
+            "node": "Get Account Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Block Info": {
+      "main": [
+        [
+          {
+            "node": "Set Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy Contract": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook8": {
+      "main": [
+        [
+          {
+            "node": "Compile Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook6": {
+      "main": [
+        [
+          {
+            "node": "Build Transfer Token Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook5": {
+      "main": [
+        [
+          {
+            "node": "Deploy Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook4": {
+      "main": [
+        [
+          {
+            "node": "Get Token Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Token Balance": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "Get NFT Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get NFT Balance": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Build Mint NFT Tx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Deploy NFT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mint NFTs Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy NFT Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transfer SEI Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Token Balance Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy Token Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transfer Token Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deploy Custom Contract Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Info Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get NFT Balance Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Results": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Balance": {
+      "main": [
+        [
+          {
+            "node": "Get Block Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "715c6f99-b4f0-4704-9f14-9cd6b0a86ab8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "GVcsKCt4gPsbSGr1",
+  "tags": []
+}

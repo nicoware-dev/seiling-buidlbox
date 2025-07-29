@@ -1,0 +1,201 @@
+{
+  "name": "Cambrian Agent Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        96
+      ],
+      "id": "5d225149-a94c-4c05-a5d1-b966671bb799",
+      "name": "Webhook",
+      "webhookId": "81e5f676-b209-49c4-827b-536037e1af9a"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.response }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        784,
+        128
+      ],
+      "id": "30199bf9-6519-4d43-9d49-c9f93b8f5cd5",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        256
+      ],
+      "id": "8f840835-064f-49bc-9152-161932f881cd",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://seiling-cambrian-agent:3000/api/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"What are the available tools in the DeFi ecosystem on the Sei Network?\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        112
+      ],
+      "id": "b4f0fb5f-df05-4984-8489-b80d3cab0ffc",
+      "name": "Message Cambrian Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2891aa9f-3665-4d56-8fa1-8cacde23164a",
+              "name": "response",
+              "value": "={{ JSON.parse($json.data).text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        128
+      ],
+      "id": "09d4f207-2506-41bb-8543-d3cbef18dada",
+      "name": "Set Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c92d64f3-c4da-41a4-9ac1-61feec1540f6",
+              "name": "body.message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        112
+      ],
+      "id": "12b5dd33-d7c8-4763-89b2-4cdfdf34cb6e",
+      "name": "Set Message"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "lms8yvbk.rcsrv.com",
+            "user-agent": "axios/1.8.3",
+            "content-length": "84",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "5.9.61.85",
+            "cf-ipcountry": "DE",
+            "cf-ray": "960eac64da2e373f-FRA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "content-type": "application/json",
+            "x-forwarded-for": "5.9.61.85, 162.158.94.21",
+            "x-forwarded-host": "lms8yvbk.rcsrv.com",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "c1851e3d0e12",
+            "x-real-ip": "162.158.94.21"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "What are the available tools in the DeFi ecosystem on the Sei Network?"
+          },
+          "webhookUrl": "https://lms8yvbk.rcsrv.com/webhook/defi-agent",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Cambrian Agent": {
+      "main": [
+        [
+          {
+            "node": "Set Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Message": {
+      "main": [
+        [
+          {
+            "node": "Message Cambrian Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e8ebb2fa-5088-458b-add0-71e3a68e2996",
+  "meta": {
+    "instanceId": "4a444303badf7ebf22cea6d4f93b6056b2894500f8341c4e12c2a0eece7fd61e"
+  },
+  "id": "Ky0TW83a22ClZcbT",
+  "tags": []
+}
