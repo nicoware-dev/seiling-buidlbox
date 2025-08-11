@@ -267,12 +267,7 @@ export default function Home() {
               <img
                 src={require('@site/static/img/other-icons/sei.png').default}
                 alt="Sei Network"
-                style={{
-                  width: 56,
-                  height: 56,
-                  display: 'block',
-                  margin: '0 auto 8px',
-                }}
+                className={styles.bigFeatureIcon}
               />
               <h3>Sei Blockchain Native</h3>
               <p>First-class integration with Sei Network. Automate DeFi, trading, and more with built-in tools.</p>

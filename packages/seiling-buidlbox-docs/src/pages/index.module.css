@@ -583,6 +583,21 @@
   transform: scale(1.2) rotate(-8deg);
 }
 
+/* Image icon in big feature cards should behave like emoji spans */
+.bigFeatureIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--sbx-space-md);
+  display: block;
+  object-fit: contain;
+  transition: transform var(--sbx-transition-normal);
+  user-select: none;
+}
+
+.bigFeatureCard:hover .bigFeatureIcon {
+  transform: scale(1.2) rotate(-8deg);
+}
+
 .bigFeatureCard h3 {
   font-size: var(--sbx-text-xl);
   margin-bottom: var(--sbx-space-sm);
