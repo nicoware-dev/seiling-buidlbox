@@ -6,6 +6,7 @@ import CodeBlock from '@theme/CodeBlock';
 import CountUp from 'react-countup';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 // Back to Top Button Component
 function BackToTopButton() {
@@ -52,6 +53,16 @@ export default function Home() {
     });
   }, []);
 
+  const videoSrc = useBaseUrl('/seilingautorun.mp4');
+
+  const handleOneClickInstall = (event) => {
+    event.preventDefault();
+    const target = document.getElementById('quickstart');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <Layout
       title="Seiling Buidlbox"
@@ -76,12 +87,29 @@ export default function Home() {
             </Link>
             <Link
               className="button button--secondary button--lg"
-              to="/docs/getting-started/quick-start"
+              to="#quickstart"
               style={{ marginLeft: 16 }}
+              onClick={handleOneClickInstall}
             >
               One-Click Install
             </Link>
           </div>
+          <video
+            src={videoSrc}
+            aria-label="Seiling Buidlbox demo video"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            style={{
+              width: '70%',
+              maxWidth: 960,
+              display: 'block',
+              margin: '24px auto 0',
+              borderRadius: 12,
+            }}
+          />
         </div>
         <div className={styles.heroWave}></div>
       </header>
@@ -236,7 +264,16 @@ export default function Home() {
               <p>From zero to production in under 10 minutes. Local or cloud—your choice, your workflow.</p>
             </div>
             <div className={styles.bigFeatureCard} data-aos="fade-up" data-aos-delay="300">
-              <span role="img" aria-label="Blockchain">🔗</span>
+              <img
+                src={require('@site/static/img/other-icons/sei.png').default}
+                alt="Sei Network"
+                style={{
+                  width: 56,
+                  height: 56,
+                  display: 'block',
+                  margin: '0 auto 8px',
+                }}
+              />
               <h3>Sei Blockchain Native</h3>
               <p>First-class integration with Sei Network. Automate DeFi, trading, and more with built-in tools.</p>
             </div>
