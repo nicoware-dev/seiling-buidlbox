@@ -17,8 +17,15 @@ if [ -f "$SCRIPT_DIR/shared_config.sh" ]; then
     load_bootstrap_config || true
 fi
 
-# Debug: Show current AUTO_MODE value
-echo "DEBUG: AUTO_MODE='$AUTO_MODE'"
+# Debug logger (enabled when DEBUG=true or LOG_LEVEL is debug/trace)
+debug_log() {
+	if [ "${DEBUG}" = "true" ] || [ "${LOG_LEVEL}" = "debug" ] || [ "${LOG_LEVEL}" = "trace" ]; then
+		echo -e "${YELLOW}[DEBUG]${NC} $1"
+	fi
+}
+
+# Debug: Show current AUTO_MODE value (only if debug enabled)
+debug_log "AUTO_MODE='$AUTO_MODE'"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -47,9 +54,7 @@ if grep -q $'\r' ".env"; then
   fi
 fi
 
-# Print contents of .env for debugging
-print_status "Contents of .env before sourcing:"
-cat ".env"
+# Do not print .env contents to avoid leaking secrets
 
 if [ ! -s ".env" ]; then
   print_error ".env is missing or empty. Aborting."
@@ -72,8 +77,8 @@ if [ -f "$SCRIPT_DIR/shared_config.sh" ]; then
     fi
 fi
 
-# Print values of ENABLE_ELIZA and ENABLE_CAMBRIAN for debugging
-print_status "After sourcing: ENABLE_ELIZA='$ENABLE_ELIZA', ENABLE_CAMBRIAN='$ENABLE_CAMBRIAN'"
+# Optional: show key flags if debug enabled
+debug_log "After sourcing: ENABLE_ELIZA='$ENABLE_ELIZA', ENABLE_CAMBRIAN='$ENABLE_CAMBRIAN'"
 
 DOCKER_DIR="docker"
 SERVICES_DIR="$DOCKER_DIR/services"
@@ -119,7 +124,7 @@ INCLUDED_SERVICE_FILES=()
 for svc in "${SERVICES[@]}"; do
   enable_var="ENABLE_${svc}"
   enable_val="${!enable_var}"
-  print_status "DEBUG: $enable_var = '$enable_val'"
+  debug_log "$enable_var = '$enable_val'"
   if [[ "$enable_val" =~ ^(yes|y|true|1)$ ]]; then
     file_base="$(get_service_file_base "$svc")"
     svc_file="$SERVICES_DIR/docker-compose.$file_base.yml"
@@ -190,7 +195,7 @@ if docker compose ps | grep -q 'Up'; then
     sleep 30
     # Check if any containers exist (more robust detection)
     container_count=$(docker compose ps -q | wc -l)
-    print_status "DEBUG: Found $container_count containers after deployment"
+    debug_log "Found $container_count containers after deployment"
     if [ "$container_count" -eq 0 ]; then
       print_error "No containers were created. Check logs above."
       exit 1
@@ -206,7 +211,7 @@ if docker compose ps | grep -q 'Up'; then
       eval $COMPOSE_CMD 2>&1
       # Check if any containers are running
       container_count=$(docker compose ps -q | wc -l)
-      print_status "DEBUG: Found $container_count containers after restart"
+      debug_log "Found $container_count containers after restart"
       if [ "$container_count" -eq 0 ]; then
         print_error "No containers were created. Check logs above."
         exit 1
@@ -221,7 +226,7 @@ else
   sleep 20
   # Check if services started successfully
   container_count=$(docker compose ps -q | wc -l)
-  print_status "DEBUG: Found $container_count containers after fresh start"
+  debug_log "Found $container_count containers after fresh start"
   if [ "$container_count" -eq 0 ]; then
     print_error "No containers were created. Check logs above."
     exit 1
@@ -244,10 +249,10 @@ echo "  Qdrant: http://${BASE_DOMAIN_NAME:-localhost}:${QDRANT_PORT:-6333}"
 echo "  Neo4j: http://${BASE_DOMAIN_NAME:-localhost}:${NEO4J_HTTP_PORT:-7474}"
 
 print_status "Default Credentials:"
-echo "  Flowise: admin / $FLOWISE_PASSWORD"
-echo "  PostgreSQL: postgres / $POSTGRES_PASSWORD"
-echo "  Neo4j: neo4j / seiling123"
-echo "  Redis: (password: seiling123)"
+echo "  Flowise: admin / [hidden] (see .env: FLOWISE_PASSWORD)"
+echo "  PostgreSQL: postgres / [hidden] (see .env: POSTGRES_PASSWORD)"
+echo "  Neo4j: neo4j / [hidden] (see service config)"
+echo "  Redis: [hidden] (see .env: REDIS_PASSWORD)"
 
 deploy_menu() {
   while true; do
