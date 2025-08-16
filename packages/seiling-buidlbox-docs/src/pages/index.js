@@ -121,10 +121,13 @@ export default function Home() {
               <h3>🚀 Bootstrap in Seconds</h3>
               <p className={styles.quickstartDesc}>Get started with a single command. No manual setup, no headaches.</p>
               <CodeBlock language="bash">
-{`curl -sSL https://raw.githubusercontent.com/nicoware-dev/seiling-buidlbox/main/bootstrap.sh | bash`}
+{`curl -sSL https://raw.githubusercontent.com/nicoware-dev/seiling-buidlbox/main/bootstrap.sh | sudo bash`}
               </CodeBlock>
               <p style={{ marginTop: 16, fontSize: '0.95em', color: '#666' }}>
                 💡 <strong>Why so easy?</strong> Seiling Buidlbox automates everything: dependencies, configuration, and deployment. Just focus on building.
+              </p>
+              <p style={{ marginTop: 12, fontSize: '0.9em', color: '#888' }}>
+                Works on any fresh VM or system. The script intelligently handles permissions and dependencies.
               </p>
             </div>
           </div>
@@ -137,7 +140,7 @@ export default function Home() {
             <div className={styles.statsRow}>
               <div className={styles.statCard} data-aos="fade-up" data-aos-delay="100">
                 <div className={styles.statNumber}>
-                  <CountUp end={12} duration={2.5} />+
+                  <CountUp end={12} duration={2.5} />
                 </div>
                 <div className={styles.statLabel}>Integrated Services</div>
               </div>
@@ -155,7 +158,7 @@ export default function Home() {
               </div>
               <div className={styles.statCard} data-aos="fade-up" data-aos-delay="400">
                 <div className={styles.statNumber}>
-                  <CountUp end={1074} duration={2.5} />+
+                  <CountUp end={1000} duration={2.5} />+
                 </div>
                 <div className={styles.statLabel}>Possible Integrations</div>
               </div>

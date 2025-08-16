@@ -238,6 +238,11 @@ setup_repository() {
         
         print_success "Repository cloned successfully."
         cd "$PROJECT_DIR"
+        
+        # Ensure script files have execute permissions after cloning
+        print_info "Setting up file permissions..."
+        chmod +x bootstrap.sh 2>/dev/null || true
+        chmod +x scripts/bootstrap/*.sh 2>/dev/null || true
     fi
     
     # Set SCRIPT_DIR for the cloned/existing repository
@@ -247,6 +252,13 @@ setup_repository() {
     if [ ! -f "bootstrap.sh" ] || [ ! -d "scripts/bootstrap" ]; then
         print_error "Repository appears to be incomplete. Missing bootstrap files."
         exit 1
+    fi
+    
+    # Ensure execute permissions are set (in case we're in an existing repo)
+    if [ ! -x "bootstrap.sh" ]; then
+        print_info "Setting execute permissions for bootstrap.sh..."
+        chmod +x bootstrap.sh 2>/dev/null || true
+        chmod +x scripts/bootstrap/*.sh 2>/dev/null || true
     fi
     
     print_success "Repository setup complete."

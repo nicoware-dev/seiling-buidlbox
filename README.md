@@ -123,7 +123,20 @@ curl -sSL https://raw.githubusercontent.com/nicoware-dev/seiling-buidlbox/main/b
 curl -sSL https://raw.githubusercontent.com/nicoware-dev/seiling-buidlbox/main/bootstrap.sh | sudo bash
 ```
 
-> **Note**: On fresh VMs, you may need `sudo` permissions to install Git and Docker automatically.
+#### Permission Issues on Fresh VMs
+If you encounter "Permission denied" errors when running the bootstrap script:
+
+```bash
+# Quick fix if already cloned:
+cd seiling-buidlbox
+chmod +x bootstrap.sh scripts/bootstrap/*.sh
+./bootstrap.sh
+
+# Or use sudo for the initial run:
+curl -sSL https://raw.githubusercontent.com/nicoware-dev/seiling-buidlbox/main/bootstrap.sh | sudo bash
+```
+
+> **Note**: On fresh VMs, you may need `sudo` permissions to install Git and Docker automatically. The bootstrap script now automatically sets execute permissions after cloning.
 
 ### Manual Setup
 ```bash
