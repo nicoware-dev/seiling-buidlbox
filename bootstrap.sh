@@ -26,6 +26,12 @@ TEST_MODE=false
 AUTO_MODE=false
 QUIET_MODE=false
 
+# Auto-detect non-interactive context (like curl | bash)
+if [ ! -t 0 ]; then
+    print_info "Non-interactive context detected (curl | bash), enabling auto mode..."
+    AUTO_MODE=true
+fi
+
 # Colors for basic output (before shared config is loaded)
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
