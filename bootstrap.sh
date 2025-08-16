@@ -26,12 +26,6 @@ TEST_MODE=false
 AUTO_MODE=false
 QUIET_MODE=false
 
-# Auto-detect non-interactive context (like curl | bash)
-if [ ! -t 0 ]; then
-    print_info "Non-interactive context detected (curl | bash), enabling auto mode..."
-    AUTO_MODE=true
-fi
-
 # Colors for basic output (before shared config is loaded)
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -46,6 +40,12 @@ print_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 print_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 print_step() { echo -e "${BLUE}[STEP]${NC} $1"; }
 print_header() { echo -e "\n${GREEN}=== $1 ===${NC}\n"; }
+
+# Auto-detect non-interactive context (like curl | bash)
+if [ ! -t 0 ]; then
+    print_info "Non-interactive context detected (curl | bash), enabling auto mode..."
+    AUTO_MODE=true
+fi
 
 # Function to check if we're running from within the repository
 is_in_repository() {
