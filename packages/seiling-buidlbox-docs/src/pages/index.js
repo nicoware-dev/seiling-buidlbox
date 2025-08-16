@@ -75,8 +75,7 @@ export default function Home() {
             alt="Seiling Buidlbox Logo"
             className={styles.heroLogo}
           />
-          <h1 className="hero__title">Seiling Buidlbox</h1>
-          <p className={styles.heroTagline}>Build, deploy, and manage AI agents for Sei Network—<b>no code required</b>.</p>
+          <h1 className={styles.heroTagline}>Build, deploy, and manage AI agents for Sei Network—<b>no code required</b>.</h1>
           <p className={styles.heroValueProp}>The fastest way to create, automate, and scale blockchain AI agents. Open-source. Visual. Developer-first.</p>
           <div className={styles.heroButtons}>
             <Link
@@ -94,22 +93,75 @@ export default function Home() {
               One-Click Install
             </Link>
           </div>
-          <video
-            src={videoSrc}
-            aria-label="Seiling Buidlbox demo video"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            style={{
-              width: '70%',
-              maxWidth: 960,
-              display: 'block',
-              margin: '24px auto 0',
-              borderRadius: 12,
-            }}
-          />
+          <div style={{
+            width: '90%',
+            maxWidth: 960,
+            margin: '24px auto 0',
+            backgroundColor: '#1e1e1e',
+            border: '1px solid #333',
+            borderRadius: '8px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
+            {/* Terminal Title Bar */}
+            <div style={{
+              backgroundColor: '#2d2d2d',
+              padding: '8px 16px',
+              borderBottom: '1px solid #333',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              {/* Terminal Buttons */}
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#ff5f56',
+                border: '1px solid #e0443e'
+              }}></div>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#ffbd2e',
+                border: '1px solid #dea123'
+              }}></div>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#27ca3f',
+                border: '1px solid #1aab29'
+              }}></div>
+              {/* Terminal Title */}
+              <div style={{
+                marginLeft: '16px',
+                color: '#ccc',
+                fontSize: '14px',
+                fontFamily: 'monospace',
+                fontWeight: '500'
+              }}>
+                Seiling Buidlbox
+              </div>
+            </div>
+            {/* Video Container */}
+            <video
+              src={videoSrc}
+              aria-label="Seiling Buidlbox demo video"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              style={{
+                width: '100%',
+                display: 'block',
+                borderRadius: '0',
+              }}
+            />
+          </div>
         </div>
         <div className={styles.heroWave}></div>
       </header>
