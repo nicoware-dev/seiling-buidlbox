@@ -87,7 +87,6 @@ export default function Home() {
             <Link
               className="button button--secondary button--lg"
               to="#quickstart"
-              style={{ marginLeft: 16 }}
               onClick={handleOneClickInstall}
             >
               One-Click Install

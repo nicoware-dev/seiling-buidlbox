@@ -201,6 +201,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 /* Enhanced hero button styles */
@@ -219,6 +220,35 @@
   text-decoration: none;
   border: 2px solid transparent;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  min-width: 140px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive button layout */
+@media screen and (max-width: 768px) {
+  .heroButtons {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .heroButtons .button {
+    width: 100%;
+    max-width: 280px;
+    min-width: 200px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .heroButtons .button {
+    max-width: 100%;
+    min-width: 180px;
+    padding: 10px 24px;
+    font-size: 1rem;
+  }
 }
 
 /* Primary button - Get Started */
