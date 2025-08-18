@@ -75,7 +75,7 @@ export default function Home() {
             alt="Seiling Buidlbox Logo"
             className={styles.heroLogo}
           />
-          <h1 className={styles.heroTagline}>Build, deploy, and manage AI agents for Sei Network—<b>no code required</b>.</h1>
+          <h1 className={styles.heroTagline}>Build & deploy AI agents for Sei.<br/><b>No code required</b>.</h1>
           <p className={styles.heroValueProp}>The fastest way to create, automate, and scale blockchain AI agents. Open-source. Visual. Developer-first.</p>
           <div className={styles.heroButtons}>
             <Link
