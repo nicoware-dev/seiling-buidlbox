@@ -554,6 +554,11 @@ See [Production Guide](packages/seiling-buidlbox-docs/docs/getting-started/deplo
 
 ## 🤝 Community & Support
 
+### Join Our Community
+- **🐦 X (Twitter)**: [Follow @seilingbuidlbox](https://x.com/seilingbuidlbox) - Latest updates and announcements
+- **💬 Telegram**: [Join our group](https://t.me/+kajTLhEF5sQwODAx) - Community discussions and support
+- **📺 YouTube**: [Watch our demo](https://youtu.be/LpeJHfmXdhs) - Complete platform walkthrough
+
 ### Getting Help
 - **Documentation**: [Complete Documentation Site](packages/seiling-buidlbox-docs/)
 - **GitHub Issues**: [Report bugs and request features](https://github.com/nicoware-dev/seiling-buidlbox/issues)

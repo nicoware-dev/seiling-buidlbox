@@ -150,12 +150,12 @@ const config = {
                 href: 'https://github.com/nicoware-dev/seiling-buidlbox',
               },
               {
-                label: 'Issues',
-                href: 'https://github.com/nicoware-dev/seiling-buidlbox/issues',
+                label: 'X (Twitter)',
+                href: 'https://x.com/seilingbuidlbox',
               },
               {
-                label: 'Discussions',
-                href: 'https://github.com/nicoware-dev/seiling-buidlbox/discussions',
+                label: 'Telegram',
+                href: 'https://t.me/+kajTLhEF5sQwODAx',
               },
             ],
           },

@@ -728,6 +728,72 @@
   transform: translateY(-3px) scale(1.05);
 }
 
+/* Social Media Links */
+.socialLinks {
+  margin-top: var(--sbx-space-xl);
+  text-align: center;
+}
+
+.socialText {
+  font-size: var(--sbx-text-lg);
+  color: var(--sbx-white);
+  margin-bottom: var(--sbx-space-md);
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.socialButtons {
+  display: flex;
+  justify-content: center;
+  gap: var(--sbx-space-md);
+  flex-wrap: wrap;
+}
+
+.socialButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sbx-space-xs);
+  font-size: var(--sbx-text-base);
+  font-weight: 500;
+  padding: var(--sbx-space-xs) var(--sbx-space-md);
+  border-radius: 1.5rem;
+  text-decoration: none;
+  transition: all var(--sbx-transition-normal);
+  border: 1px solid transparent;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.socialTwitter {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+  color: var(--sbx-white);
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.socialTwitter:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.8) 100%);
+  color: #000000 !important;
+  transform: translateY(-2px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+}
+
+.socialTelegram {
+  background: linear-gradient(135deg, rgba(0, 136, 204, 0.8) 0%, rgba(0, 136, 204, 0.6) 100%);
+  color: var(--sbx-white);
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.socialTelegram:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.8) 100%);
+  color: #0088cc !important;
+  transform: translateY(-2px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 996px) {
   .heroTagline {
@@ -749,6 +815,14 @@
   .ctaButtons {
     flex-direction: column;
     align-items: center;
+  }
+  .socialButtons {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sbx-space-sm);
+  }
+  .socialButton {
+    min-width: 160px;
   }
 } 
 

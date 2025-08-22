@@ -357,6 +357,33 @@ export default function Home() {
                 View on GitHub
               </Link>
             </div>
+            
+            {/* Social Media Links */}
+            <div className={styles.socialLinks}>
+              <p className={styles.socialText}>Join our community</p>
+              <div className={styles.socialButtons}>
+                <Link
+                  className={`${styles.socialButton} ${styles.socialTwitter}`}
+                  to="https://x.com/seilingbuidlbox"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Follow us on X (Twitter)"
+                >
+                  <span role="img" aria-label="X Twitter">𝕏</span>
+                  Follow on X
+                </Link>
+                <Link
+                  className={`${styles.socialButton} ${styles.socialTelegram}`}
+                  to="https://t.me/+kajTLhEF5sQwODAx"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Join our Telegram"
+                >
+                  <span role="img" aria-label="Telegram">✈️</span>
+                  Join Telegram
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>
