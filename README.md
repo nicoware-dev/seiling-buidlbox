@@ -556,7 +556,7 @@ See [Production Guide](packages/seiling-buidlbox-docs/docs/getting-started/deplo
 
 ### Join Our Community
 - **🐦 X (Twitter)**: [Follow @seilingbuidlbox](https://x.com/seilingbuidlbox) - Latest updates and announcements
-- **💬 Telegram**: [Join our group](https://t.me/+kajTLhEF5sQwODAx) - Community discussions and support
+- **💬 Telegram**: [Join our group](https://t.me/seiling_buidlbox) - Community discussions and support
 - **📺 YouTube**: [Watch our demo](https://youtu.be/LpeJHfmXdhs) - Complete platform walkthrough
 
 ### Getting Help

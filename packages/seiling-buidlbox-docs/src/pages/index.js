@@ -374,7 +374,7 @@ export default function Home() {
                 </Link>
                 <Link
                   className={`${styles.socialButton} ${styles.socialTelegram}`}
-                  to="https://t.me/+kajTLhEF5sQwODAx"
+                  to="https://t.me/seiling_buidlbox"
                   target="_blank"
                   rel="noopener"
                   aria-label="Join our Telegram"
