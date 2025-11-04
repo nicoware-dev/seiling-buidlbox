@@ -1,0 +1,44 @@
+/* Global styles for Seiling Auditor */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Top navigation bar */
+.sbx-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(90deg, #2563eb 0%, #10b981 100%);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sbx-topbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sbx-brand { display: flex; align-items: center; gap: 10px; }
+.sbx-brand__logo { height: 28px; }
+.sbx-brand__name { font-weight: 700; letter-spacing: 0.2px; }
+
