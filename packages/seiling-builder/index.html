@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seiling Builder</title>
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="icon" href="/icon.png" />
+    <script>
+      // Polyfill process BEFORE any modules load to prevent solc errors
+      if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
+        window.process = {
+          env: {},
+          platform: 'browser',
+          version: 'v16.0.0',
+          nextTick: function(callback) { setTimeout(callback, 0); },
+          cwd: function() { return '/'; },
+          browser: true
+        };
+      }
+      if (typeof global === 'undefined') {
+        window.global = window;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+  </html>
+

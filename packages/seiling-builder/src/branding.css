@@ -1,0 +1,20 @@
+/* Seiling Buidlbox brand variables (subset) */
+:root {
+  --sbx-blue: #2563eb;
+  --sbx-blue-dark: #1e40af;
+  --sbx-blue-light: #60a5fa;
+  --sbx-green: #10b981;
+  --sbx-gray-light: #e5e7eb;
+  --sbx-white: #ffffff;
+}
+
+.sbx-header {
+  background: linear-gradient(90deg, var(--sbx-blue) 0%, var(--sbx-green) 100%);
+  color: var(--sbx-white);
+}
+
+.sbx-title {
+  color: var(--sbx-white);
+}
+
+

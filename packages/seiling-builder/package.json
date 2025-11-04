@@ -1,0 +1,36 @@
+{
+  "name": "seiling-builder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Seiling Builder – no-code contract interaction and deployment UI for Sei EVM. Part of Seiling Buidlbox v2.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3002",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 3002"
+  },
+  "dependencies": {
+    "@mantine/core": "^7.12.0",
+    "@mantine/hooks": "^7.12.0",
+    "@mantine/modals": "^7.12.0",
+    "@mantine/notifications": "^7.12.0",
+    "@tabler/icons-react": "^3.10.0",
+    "@tanstack/react-query": "^5.90.2",
+    "connectkit": "^1.9.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "solc": "^0.8.30",
+    "viem": "2.21.35",
+    "wagmi": "2.12.10"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "@types/react": "18.2.79",
+    "@types/react-dom": "18.2.25",
+    "@vitejs/plugin-react": "4.3.1",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10",
+    "typescript": "5.6.2",
+    "vite": "5.4.3"
+  }
+}
