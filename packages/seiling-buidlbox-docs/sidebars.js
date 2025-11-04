@@ -45,6 +45,10 @@ const sidebars = {
             'services/openwebui',
             'services/n8n',
             'services/flowise',
+            'services/captain',
+            'services/builder',
+            'services/os',
+            'services/auditor',
           ],
         },
         {
