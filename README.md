@@ -25,7 +25,7 @@ To become the definitive toolkit for no-code AI agent development on Sei Network
 
 ## 🚀 What You Get
 
-**12 Production-Ready Services** working together out of the box:
+**12+ Production-Ready Services** working together out of the box, with expanded capabilities available:
 
 ### 🖥️ User Interface Services
 - **[OpenWebUI](packages/seiling-buidlbox-docs/docs/services/openwebui.md)** - Primary chat interface (Port: 5002)
@@ -58,6 +58,29 @@ To become the definitive toolkit for no-code AI agent development on Sei Network
   - *Image: `traefik:v3.0`* - **Disabled by default**
 - **[Ollama](packages/seiling-buidlbox-docs/docs/services/ollama.md)** - Local LLM server (Port: 11434)
   - *Image: `ollama/ollama:latest`* - **Disabled by default** (requires 8GB+ RAM)
+
+### 🔍 Expanded Capabilities (Optional)
+- **[Langfuse](docs/pillars/expanded-capabilities/langfuse.md)** - LLM observability and tracing (Port: 8004)
+  - *Image: `langfuse/langfuse:3`* - **Disabled by default**
+  - LLM call tracing across all agents (n8n, Flowise, ElizaOS, Cambrian)
+- **[Prometheus/Grafana](docs/pillars/expanded-capabilities/prometheus-grafana.md)** - System monitoring and metrics (Ports: 9090/8005)
+  - *Images: `prom/prometheus:latest`, `grafana/grafana:latest`* - **Disabled by default**
+  - Metrics collection and visualization for all services
+- **[SearXNG](docs/pillars/expanded-capabilities/searxng.md)** - Privacy-focused meta-search (Port: 8006)
+  - *Image: `searxng/searxng:latest`* - **Disabled by default**
+  - Includes Sei-specific search engines (SeiScan, SeiTrace)
+- **[Supabase](docs/pillars/expanded-capabilities/supabase.md)** - Full Backend-as-a-Service stack (Ports: 8000/8007)
+  - *Images: `supabase/postgres`, `supabase/kong`, `supabase/gotrue`, etc.* - **Disabled by default**
+  - Auth, Storage, Realtime, and Studio services
+- **[Kokoro/Chatterbox](docs/pillars/expanded-capabilities/kokoro-chatterbox.md)** - Voice/Audio integration (Port: 3008)
+  - *Images: `ghcr.io/codewithryan/kokoro:latest`, `ghcr.io/opentalkz/chatterbox:latest`* - **Disabled by default**
+  - TTS/ASR for voice-enabled agents
+- **[Caddy](docs/pillars/expanded-capabilities/caddy-cloudflared.md)** - Modern reverse proxy with auto-SSL (Ports: 80/443)
+  - *Image: `caddy:2-alpine`* - **Disabled by default**
+  - Alternative to Traefik with automatic HTTPS
+- **[Cloudflared](docs/pillars/expanded-capabilities/caddy-cloudflared.md)** - Zero-trust tunneling (Optional)
+  - *Image: `cloudflare/cloudflared:latest`* - **Disabled by default**
+  - Secure tunnel for exposing services
 
 ### Core Infrastructure Services
 ```
@@ -170,6 +193,12 @@ After deployment completes, access these services:
 | **Sei MCP** | http://localhost:5004 | Blockchain tools | Enabled by default | [Guide](packages/seiling-buidlbox-docs/docs/services/sei-mcp.md) |
 | **Neo4j** | http://localhost:7474 | Graph database | Enabled by default | [Guide](packages/seiling-buidlbox-docs/docs/services/neo4j.md) |
 | **Qdrant** | http://localhost:6333 | Vector database | Enabled by default | [Guide](packages/seiling-buidlbox-docs/docs/services/qdrant.md) |
+| **Langfuse** | http://localhost:8004 | LLM observability | Optional | [Guide](docs/pillars/expanded-capabilities/langfuse.md) |
+| **Prometheus** | http://localhost:9090 | Metrics collection | Optional | [Guide](docs/pillars/expanded-capabilities/prometheus-grafana.md) |
+| **Grafana** | http://localhost:8005 | Monitoring dashboards | Optional | [Guide](docs/pillars/expanded-capabilities/prometheus-grafana.md) |
+| **SearXNG** | http://localhost:8006 | Privacy search | Optional | [Guide](docs/pillars/expanded-capabilities/searxng.md) |
+| **Supabase Studio** | http://localhost:8007 | Backend admin UI | Optional | [Guide](docs/pillars/expanded-capabilities/supabase.md) |
+| **Chatterbox** | http://localhost:3008 | Voice-enabled chat | Optional | [Guide](docs/pillars/expanded-capabilities/kokoro-chatterbox.md) |
 | **Documentation** | http://localhost:1111 | Complete guides | When running | [Docs Site](packages/seiling-buidlbox-docs/) |
 
 ### Default Credentials
@@ -348,6 +377,14 @@ ENABLE_QDRANT=yes           # Enabled by default
 ENABLE_NEO4J=yes            # Enabled by default
 ENABLE_TRAEFIK=no           # Disabled for local development
 ENABLE_OLLAMA=no            # Disabled due to high resource usage
+# Expanded Capabilities (all disabled by default)
+ENABLE_LANGFUSE=no          # LLM observability
+ENABLE_PROMETHEUS=no        # Monitoring stack
+ENABLE_CADDY=no             # Alternative reverse proxy
+ENABLE_CLOUDFLARED=no       # Zero-trust tunneling
+ENABLE_SEARXNG=no           # Privacy search
+ENABLE_SUPABASE=no          # Backend-as-a-Service
+ENABLE_KOKORO=no            # Voice integration
 ```
 
 ### Service Categories
@@ -365,10 +402,25 @@ Enable these based on your specific needs:
 - **Traefik**: For production deployments with SSL (requires domain)
 - **Ollama**: For local LLM hosting (requires 8GB+ RAM)
 
+#### 🔍 **Expanded Capabilities** (All Disabled by Default)
+Optional services that enhance observability, monitoring, and capabilities:
+- **Langfuse**: LLM observability and tracing across all agents
+- **Prometheus/Grafana**: System monitoring and metrics visualization
+- **SearXNG**: Privacy-focused meta-search with Sei-specific engines
+- **Supabase**: Full BaaS stack (Auth, Storage, Realtime, Studio)
+- **Kokoro/Chatterbox**: Voice-enabled multi-modal agents
+- **Caddy**: Modern reverse proxy with auto-SSL (alternative to Traefik)
+- **Cloudflared**: Zero-trust tunneling for secure service exposure
+
 ### Resource Requirements
 - **Default Setup**: 10 containers, ~4GB RAM, 10GB storage
 - **With Ollama**: 11 containers, ~8GB RAM, 15GB storage  
 - **With Traefik**: 12 containers (production setup)
+- **With Expanded Capabilities**: Additional containers based on enabled services
+  - Langfuse: +4 containers (web, worker, ClickHouse, MinIO)
+  - Prometheus/Grafana: +2 containers
+  - Supabase: +6 containers (DB, Kong, Auth, Storage, Realtime, Studio)
+  - Additional services: +1-2 containers each
 
 ### Production Setup
 - Enable Traefik for SSL termination
@@ -556,7 +608,7 @@ See [Production Guide](packages/seiling-buidlbox-docs/docs/getting-started/deplo
 
 ### Join Our Community
 - **🐦 X (Twitter)**: [Follow @seilingbuidlbox](https://x.com/seilingbuidlbox) - Latest updates and announcements
-- **💬 Telegram**: [Join our group](https://t.me/seiling_buidlbox) - Community discussions and support
+- **💬 Telegram**: [Join our group](https://t.me/+kajTLhEF5sQwODAx) - Community discussions and support
 - **📺 YouTube**: [Watch our demo](https://youtu.be/LpeJHfmXdhs) - Complete platform walkthrough
 
 ### Getting Help

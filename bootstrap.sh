@@ -511,6 +511,13 @@ main() {
             print_error "Service deployment failed. Exiting."
             exit 1
         fi
+
+        # Demo profile: import sample templates
+        if [ "${PROFILE:-}" = "demo" ]; then
+            if [ -f "$BOOTSTRAP_DIR/import_sample_templates.sh" ]; then
+                execute_with_output "bash '$BOOTSTRAP_DIR/import_sample_templates.sh'" "Importing demo templates"
+            fi
+        fi
     else
         # Fallback execution without fancy progress tracking
         print_step "Detecting operating system..."
@@ -549,6 +556,13 @@ main() {
         if ! bash "$BOOTSTRAP_DIR/deploy_services.sh"; then
             print_error "Service deployment failed. Exiting."
             exit 1
+        fi
+
+        # Demo profile: import sample templates
+        if [ "${PROFILE:-}" = "demo" ]; then
+            if [ -f "$BOOTSTRAP_DIR/import_sample_templates.sh" ]; then
+                bash "$BOOTSTRAP_DIR/import_sample_templates.sh"
+            fi
         fi
     fi
 
@@ -592,11 +606,13 @@ Total time: ${minutes}m ${seconds}s" "success"
         # Construct URLs based on local vs remote mode
         if [ "${BASE_DOMAIN_NAME:-localhost}" = "localhost" ]; then
             # Local mode: use ports
+            echo "Seiling Captain: http://localhost:${CAPTAIN_PORT:-3001}"
             echo "OpenWebUI: http://localhost:${OPENWEBUI_PORT:-5002}"
             echo "n8n: http://localhost:${N8N_PORT:-5001}"
             echo "Flowise: http://localhost:${FLOWISE_PORT:-5003}"
         else
             # Remote mode: use subdomains with HTTPS
+            echo "Seiling Captain: https://${CAPTAIN_SUBDOMAIN:-captain}.${BASE_DOMAIN_NAME}"
             echo "OpenWebUI: https://${OPENWEBUI_SUBDOMAIN:-chat}.${BASE_DOMAIN_NAME}"
             echo "n8n: https://${N8N_SUBDOMAIN:-n8n}.${BASE_DOMAIN_NAME}"
             echo "Flowise: https://${FLOWISE_SUBDOMAIN:-flowise}.${BASE_DOMAIN_NAME}"

@@ -151,6 +151,43 @@ run_health_check() {
     services_to_check+=("ollama:${OLLAMA_PORT:-11434}:/")
   fi
   
+  # Check Langfuse if enabled
+  if [[ "${ENABLE_LANGFUSE:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    # Langfuse uses port 3000 internally but may be proxied
+    services_to_check+=("langfuse-web:3000:/api/public/health")
+  fi
+  
+  # Check Prometheus if enabled
+  if [[ "${ENABLE_PROMETHEUS:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    services_to_check+=("prometheus:9090:/-/healthy")
+    # Grafana uses port 3000 internally but may be proxied
+    services_to_check+=("grafana:3000:/api/health")
+  fi
+  
+  # Check SearXNG if enabled
+  if [[ "${ENABLE_SEARXNG:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    # SearXNG uses port 8080 internally
+    services_to_check+=("searxng:8080:/healthz")
+  fi
+  
+  # Check Supabase services if enabled
+  if [[ "${ENABLE_SUPABASE:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    services_to_check+=("supabase-kong:8000:/")
+    # Supabase Studio uses port 3000 internally
+    services_to_check+=("supabase-studio:3000:/api/profile")
+  fi
+  
+  # Check Caddy if enabled
+  if [[ "${ENABLE_CADDY:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    services_to_check+=("caddy:80:/")
+  fi
+  
+  # Check Kokoro/Chatterbox if enabled
+  if [[ "${ENABLE_KOKORO:-no}" =~ ^(yes|y|true|1)$ ]]; then
+    # Chatterbox uses port 3008 internally
+    services_to_check+=("chatterbox:3008:/health")
+  fi
+  
   for service_info in "${services_to_check[@]}"; do
     IFS=':' read -r service_name port endpoint <<< "$service_info"
     if check_service_health "$service_name" "$port" "$endpoint" "$max_retries"; then

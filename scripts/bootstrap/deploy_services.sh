@@ -96,10 +96,18 @@ get_service_file_base() {
     SEI_MCP) echo "sei-mcp-server" ;;
     ELIZA) echo "eliza" ;;
     CAMBRIAN) echo "cambrian" ;;
+    CAPTAIN) echo "captain" ;;
     POSTGRES) echo "postgres" ;;
     REDIS) echo "redis" ;;
     QDRANT) echo "qdrant" ;;
     NEO4J) echo "neo4j" ;;
+    LANGFUSE) echo "langfuse" ;;
+    PROMETHEUS) echo "prometheus-grafana" ;;
+    CADDY) echo "caddy" ;;
+    CLOUDFLARED) echo "cloudflared" ;;
+    SEARXNG) echo "searxng" ;;
+    SUPABASE) echo "supabase" ;;
+    KOKORO) echo "kokoro-chatterbox" ;;
     *) echo "" ;;
   esac
 }
@@ -113,10 +121,18 @@ SERVICES=(
   SEI_MCP
   ELIZA
   CAMBRIAN
+  CAPTAIN
   POSTGRES
   REDIS
   QDRANT
   NEO4J
+  LANGFUSE
+  PROMETHEUS
+  CADDY
+  CLOUDFLARED
+  SEARXNG
+  SUPABASE
+  KOKORO
 )
 
 COMPOSE_FILES=("$COMPOSE_FILE")

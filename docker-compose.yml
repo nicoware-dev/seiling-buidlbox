@@ -22,6 +22,19 @@ volumes:
   sei_mcp_storage:
   # Reverse proxy volumes
   traefik_letsencrypt:
+  # Langfuse volumes
+  langfuse_clickhouse_data:
+  langfuse_clickhouse_logs:
+  langfuse_minio_data:
+  # Prometheus/Grafana volumes
+  prometheus_data:
+  grafana_data:
+  # Caddy volumes
+  caddy_data:
+  caddy_config:
+  # Supabase volumes
+  supabase_db_data:
+  supabase_storage_data:
 
 networks:
   seiling_network:
