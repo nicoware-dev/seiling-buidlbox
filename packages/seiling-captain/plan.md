@@ -9,7 +9,7 @@ Seiling Captain is a local-first Next.js control plane UI for managing Seiling B
 
 ## Current State
 
-### ✅ Completed (December 2024)
+### ✅ Completed
 - Basic Next.js scaffolding (`app/layout.tsx`, `app/page.tsx`)
 - **Service Discovery** (`lib/serviceCatalog.ts`): Auto-discovers services from `docker/services/*.yml`
 - **Enhanced Docker Library** (`lib/docker.ts`): 
@@ -49,7 +49,7 @@ Seiling Captain is a local-first Next.js control plane UI for managing Seiling B
 - Docker compose fragment: `docker/services/docker-compose.captain.yml`
 - Basic README, PRD, and implementation documentation
 
-### ✅ Additional Enhancements Completed (December 2024)
+### ✅ Additional Enhancements Completed 
 - **Health Status Integration**: Health badges now displayed on service cards with real-time updates
 - **Real-time Status Updates**: Implemented polling (5s for services, 30s for health) with toggle controls
 - **Rate Limiting**: Added rate limiting to service control API (10 req/min) and env API (5 req/min)

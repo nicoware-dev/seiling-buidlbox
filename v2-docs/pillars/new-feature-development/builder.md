@@ -36,11 +36,6 @@ const execute = async (abi, method, params) => {
 - React/Vite/Mantine UI.
 - Wagmi for wallets, Sei SDK.
 
-## Execution Plan
-1. **Fork**: Adapt Examples (Week 1).
-2. **Features**: Deploy/ABI (Week 2).
-3. **Sei**: IBC/audit (Week 3).
-
 ## Implementation Details
 - **As New Package**: packages/seiling-builder.
 - **Docker Files**: docker-compose.builder.yml.

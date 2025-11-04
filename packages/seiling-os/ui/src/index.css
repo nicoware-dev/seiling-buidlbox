@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --sbx-blue: #2563eb;
+  --sbx-blue-dark: #1e40af;
+  --sbx-blue-light: #60a5fa;
+  --sbx-green: #10b981;
+  --sbx-gray: #f3f4f6;
+  --sbx-gray-light: #e5e7eb;
+  --sbx-gray-medium: #6b7280;
+  --bg-body: #f3f4f6;
+  --bg-surface: #ffffff;
+  --border: var(--sbx-gray-light);
+  --text: #22292f;
+}
+
+[data-theme='dark'] {
+  --sbx-blue: #60a5fa;
+  --sbx-blue-dark: #2563eb;
+  --sbx-blue-light: #93c5fd;
+  --sbx-green: #6ee7b7;
+  --sbx-gray: #0b1220;
+  --sbx-gray-light: #3b4352;
+  --sbx-gray-medium: #9ca3af;
+  --bg-body: #0b1220;
+  --bg-surface: #23272f;
+  --border: var(--sbx-gray-light);
+  --text: #e5e7eb;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  background: var(--bg-body);
+}
+
+/* Utility skins mirroring Captain */
+.sbx-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+.sbx-btn { @apply px-4 py-2 rounded font-semibold transition; }
+.sbx-btn-primary { background: var(--sbx-blue); color: white; }
+.sbx-btn-secondary { background: var(--sbx-gray-light); color: var(--text); border: 1px solid var(--border); }
+.sbx-btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.sbx-btn-outline:hover { background: color-mix(in oklab, var(--sbx-blue) 18%, transparent); }
+
+

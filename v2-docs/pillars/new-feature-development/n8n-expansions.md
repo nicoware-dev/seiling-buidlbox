@@ -4,7 +4,7 @@
 10+ new Sei nodes for protocols/explorers/cross-chain.
 
 ## Overview
-Extend n8n-nodes-sei with Astroport swaps, IBC transfers, SeiScan queries, MEV protection.
+Extend n8n-nodes-sei with new nodes based on cambrian sdk defi protocol integrations. 1 node per protocol.
 
 ## Goals
 - 5x workflow capabilities.
@@ -15,11 +15,6 @@ Extend n8n-nodes-sei with Astroport swaps, IBC transfers, SeiScan queries, MEV p
 - TS nodes with n8n pattern.
 - Shared Sei client lib.
 
-## Execution Plan
-1. **Core Nodes**: Protocol-specific (Week 1).
-2. **Advanced**: Cross-chain (Week 2).
-3. **Templates**: Pre-built (Week 3).
-
 ## Implementation Details
 - **As Package Update**: packages/n8n-nodes-sei.
 - **Docker Files**: None.
@@ -28,18 +23,7 @@ Extend n8n-nodes-sei with Astroport swaps, IBC transfers, SeiScan queries, MEV p
 - **Modifications**: Add to existing node set.
 
 ## Setup & Implementation
-- **Nodes**: astroportSwap, ibcTransfer, seiScanQuery.
-- **Code Snippet** (Grok):
-```ts
-// nodes/AstroportSwap.ts
-import { INodeType } from 'n8n-workflow';
-export class AstroportSwap implements INodeType {
-  async execute() {
-    const tx = await astroport.swap({ from: 'USDC', to: 'SEI', amount });
-    return { txHash: tx.hash };
-  }
-}
-```
+- **Nodes**: Based on cambrian sdk defi protocol integrations. 1 node per protocol.
 - **Integration**: Update packages/n8n-nodes-sei; templates showcase.
 
 ## Metrics/Challenges

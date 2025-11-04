@@ -15,11 +15,6 @@ Local-first Next.js app; manage .env, start/stop/restart, health/logs. Local-onl
 - Next.js dashboard with React Query.
 - Service cards, env editor.
 
-## Execution Plan
-1. **Setup**: Fork cambrian (Week 1).
-2. **Core Features**: Controls/monitoring (Week 2-3).
-3. **Integration**: Docker API (Week 4).
-
 ## Implementation Details
 - **As New Package**: packages/seiling-captain.
 - **Docker Files**: docker-compose.captain.yml.

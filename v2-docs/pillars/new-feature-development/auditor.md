@@ -33,11 +33,6 @@ services:
 - Next.js UI, Prisma DB.
 - Dockerized Slither/Mythril.
 
-## Execution Plan
-1. **Fork**: Adapt 01-ai (Week 1).
-2. **Sei**: Scan API (Week 2).
-3. **Integration**: Auditor in Builder (Week 3).
-
 ## Implementation Details
 - **As New Package**: packages/seiling-auditor.
 - **Docker Files**: docker-compose.auditor.yml.
