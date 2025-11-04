@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-sei",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "Custom n8n nodes for Sei blockchain integration",
   "keywords": [
     "n8n-community-node-package",
@@ -53,7 +53,18 @@
       "dist/nodes/Sei/SeiTxExecutor.node.js",
       "dist/nodes/Sei/SeiExplorer.node.js",
       "dist/nodes/Sei/SeiDeployContract.node.js",
-      "dist/nodes/Sei/SeiCompileContract.node.js"
+      "dist/nodes/Sei/SeiCompileContract.node.js",
+      "dist/nodes/Sei/Trading/Symphony.node.js",
+      "dist/nodes/Sei/Trading/Carbon.node.js",
+      "dist/nodes/Sei/Lending/Yei.node.js",
+      "dist/nodes/Sei/Lending/Takara.node.js",
+      "dist/nodes/Sei/Staking/Silo.node.js",
+      "dist/nodes/Sei/Derivatives/Citrex.node.js",
+      "dist/nodes/Sei/Bridge/DeBridge.node.js",
+      "dist/nodes/Sei/Bridge/LiFi.node.js",
+      "dist/nodes/Sei/Utility/DexScreener.node.js",
+      "dist/nodes/Sei/Utility/ERC20.node.js",
+      "dist/nodes/Sei/Utility/ERC721.node.js"
     ]
   },
   "devDependencies": {
@@ -73,6 +84,12 @@
   "dependencies": {
     "ethers": "^6.14.4",
     "lodash": "^4.17.21",
-    "solc": "^0.8.26"
+    "solc": "^0.8.26",
+    "viem": "^2.23.3",
+    "@sei-agent-kit-custom": "workspace:*",
+    "symphony-sdk": "^2.1.0",
+    "@bancor/carbon-sdk": "^0.0.115-DEV",
+    "citrex-sdk": "^1.2.2",
+    "@lifi/sdk": "^3.9.2"
   }
 }

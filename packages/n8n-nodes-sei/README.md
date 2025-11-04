@@ -4,13 +4,40 @@ Custom n8n nodes for Sei blockchain integration.
 
 ## Features
 
+### Core Blockchain Nodes
 - **Sei Transaction Builder**: Build Sei blockchain transactions (token transfers, contract interactions)
 - **Sei Transaction Executor**: Execute Sei blockchain transactions
 - **Sei Explorer**: Query blocks, transactions, balances, and contract calls
 - **Sei Deploy Contract**: Deploy custom, ERC-20, or ERC-721 contracts to Sei or any EVM-compatible chain
 - **Sei Compile Contract**: Compile Solidity source code to bytecode and ABI with built-in templates
+
+### Trading Protocol Nodes
+- **Symphony**: Token swaps via DEX aggregator
+- **Carbon**: Create, update, delete, and query trading strategies
+
+### Lending Protocol Nodes
+- **Yei Finance**: Supply, borrow, repay, withdraw assets, wrap/unwrap SEI, and query health factors
+- **Takara Protocol**: Mint, borrow, repay, redeem tTokens, and query protocol state
+
+### Staking Nodes
+- **Silo Finance**: Stake and unstake SEI bonds
+
+### Derivatives Nodes
+- **Citrex**: Place/cancel orders, manage positions, deposit/withdraw, query orderbooks, tickers, and trading history
+
+### Bridge Nodes
+- **DeBridge**: Cross-chain transfers via DeBridge Liquidity Network
+- **LiFi**: Cross-chain swaps via Li.Fi protocol
+
+### Utility Nodes
+- **DexScreener**: Get token information by symbol
+- **ERC20**: Query balances and transfer ERC20 tokens
+- **ERC721**: Query balances, transfer, and mint NFTs
+
+### Network Support
 - Support for Sei Mainnet, Testnet, and custom networks
 - Token transfers, smart contract interactions, contract deployment and compilation
+- Comprehensive DeFi protocol integrations covering 90% of Sei ecosystem
 
 ## Installation
 
@@ -59,19 +86,21 @@ npm install n8n-nodes-sei
 
 ### Using the Nodes
 
-#### Sei Transaction Builder
+#### Core Blockchain Nodes
+
+**Sei Transaction Builder**
 - Build transactions for token transfers or contract interactions
 - Returns transaction data that can be used with the executor
 
-#### Sei Transaction Executor
+**Sei Transaction Executor**
 - Execute transactions on the Sei blockchain
 - Requires transaction data from the builder or manual input
 
-#### Sei Explorer
+**Sei Explorer**
 - Query block info, transaction details, account balances, or call contract methods
 - Supports custom RPC and all EVM-compatible chains
 
-#### Sei Deploy Contract
+**Sei Deploy Contract**
 - Deploy a smart contract to Sei or any EVM-compatible chain
 - Supports three contract types:
   - **Custom**: Paste ABI and bytecode, enter constructor arguments
@@ -81,7 +110,7 @@ npm install n8n-nodes-sei
 - Uses the same credential as other Sei nodes
 - Outputs deployed contract address and transaction hash
 
-#### Sei Compile Contract
+**Sei Compile Contract**
 - Compile Solidity source code to bytecode and ABI
 - Features:
   - **Solidity Compiler**: Built-in compiler with version selection (0.8.19-0.8.24)
@@ -90,6 +119,33 @@ npm install n8n-nodes-sei
   - **Error Handling**: Comprehensive compilation error and warning reporting
   - **Output Format**: Produces bytecode and ABI ready for deployment
 - Perfect for complete smart contract workflow: Write → Compile → Deploy → Interact
+
+#### Protocol-Specific Nodes
+
+All protocol nodes support action selection - choose the protocol once, then select the action to perform.
+
+**Trading Protocols**
+- **Symphony**: Swap tokens via DEX aggregator
+- **Carbon**: Create, update, delete trading strategies; query user strategies
+
+**Lending Protocols**
+- **Yei Finance**: Supply, borrow, repay, withdraw assets; wrap/unwrap SEI; get health factor
+- **Takara Protocol**: Mint, borrow, repay, redeem tTokens; query protocol state
+
+**Staking**
+- **Silo Finance**: Stake and unstake SEI bonds
+
+**Derivatives**
+- **Citrex**: Place/cancel orders, manage positions, deposit/withdraw, query markets and trading data
+
+**Bridges**
+- **DeBridge**: Cross-chain transfers with quote estimation
+- **LiFi**: Cross-chain swaps with quote, route, and chain information
+
+**Utilities**
+- **DexScreener**: Get token addresses by symbol
+- **ERC20**: Query balances and transfer ERC20 tokens
+- **ERC721**: Query balances, transfer, and mint NFTs
 
 ### Networks Supported
 
