@@ -1,0 +1,39 @@
+services:
+  sei-mcp-server-v2:
+    build:
+      context: ./packages/sei-mcp-server-v2
+    container_name: seiling-sei-mcp-server-v2
+    restart: unless-stopped
+    environment:
+      - MCP_SERVER_PORT=${MCP_SERVER_V2_PORT:-3334}
+      - PRIVATE_KEY=${SEI_PRIVATE_KEY}
+      - SEI_PRIVATE_KEY=${SEI_PRIVATE_KEY}
+      - RPC_URL=${RPC_URL:-https://evm-rpc.sei-apis.com}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - DEBUG=${DEBUG:-false}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+    ports:
+      - "${MCP_SERVER_V2_PORT:-3334}:${MCP_SERVER_V2_PORT:-3334}"
+    volumes:
+      - sei_mcp_v2_storage:/app/.sei-mcp
+      - sei_mcp_v2_logs:/app/logs
+      - sei_mcp_v2_config:/app/config
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${MCP_SERVER_V2_PORT:-3334}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  sei_mcp_v2_storage:
+    driver: local
+  sei_mcp_v2_logs:
+    driver: local
+  sei_mcp_v2_config:
+    driver: local
+
+

@@ -139,22 +139,26 @@ fi
 # Service enable/disable variables
 SERVICES=(
   TRAEFIK
+  CADDY
+  CLOUDFLARED
   OLLAMA
   N8N
   OPENWEBUI
   FLOWISE
   SEI_MCP
+  SEI_MCP_V2
   ELIZA
   CAMBRIAN
   CAPTAIN
+  OS
+  BUILDER
+  AUDITOR
   POSTGRES
   REDIS
   QDRANT
   NEO4J
   LANGFUSE
   PROMETHEUS
-  CADDY
-  CLOUDFLARED
   SEARXNG
   SUPABASE
   KOKORO
@@ -215,7 +219,7 @@ else
         set_service_enable "$svc" "yes"
         ;;
       full-local)
-        if [[ "$svc" == "TRAEFIK" ]]; then
+        if [[ "$svc" == "TRAEFIK" || "$svc" == "CADDY" || "$svc" == "CLOUDFLARED" ]]; then
           set_service_enable "$svc" "no"
         else
           set_service_enable "$svc" "yes"
@@ -223,6 +227,42 @@ else
         ;;
     esac
   done
+fi
+
+# Reverse proxy selection (interactive profiles only; force disabled for full-local)
+if [[ "$PROFILE" == "full-local" ]]; then
+  set_service_enable "TRAEFIK" "no"
+  set_service_enable "CADDY" "no"
+  set_service_enable "CLOUDFLARED" "no"
+elif [[ "$PROFILE" == "full" || "$PROFILE" == "remote" || "$PROFILE" == "custom" ]]; then
+  echo ""
+  echo "Reverse proxy selection:"
+  echo "1) Traefik (80/443/8080)"
+  echo "2) Caddy (80/443)"
+  echo "3) None"
+  read -p "Choose proxy [default: 1]: " PROXY_CHOICE
+  PROXY_CHOICE=${PROXY_CHOICE:-1}
+  case "$PROXY_CHOICE" in
+    1)
+      set_service_enable "TRAEFIK" "yes"
+      set_service_enable "CADDY" "no"
+      ;;
+    2)
+      set_service_enable "TRAEFIK" "no"
+      set_service_enable "CADDY" "yes"
+      ;;
+    3|*)
+      set_service_enable "TRAEFIK" "no"
+      set_service_enable "CADDY" "no"
+      ;;
+  esac
+
+  read -p "Enable Cloudflared tunnel? [y/N]: " CF_CHOICE
+  if [[ "$CF_CHOICE" =~ ^[Yy]$ ]]; then
+    set_service_enable "CLOUDFLARED" "yes"
+  else
+    set_service_enable "CLOUDFLARED" "no"
+  fi
 fi
 
 # Prompt for secrets and credentials
@@ -460,15 +500,21 @@ N8N_PORT=5001
 OPENWEBUI_PORT=5002
 FLOWISE_PORT=5003
 MCP_SERVER_PORT=5004
+MCP_SERVER_V2_PORT=3334
 ELIZA_PORT=5005
 CAMBRIAN_AGENT_PORT=5006
 POSTGRES_PORT=5432
+AUDITOR_DB_PORT=5433
 REDIS_PORT=6379
 QDRANT_PORT=6333
 NEO4J_HTTP_PORT=7474
 NEO4J_BOLT_PORT=7687
 OLLAMA_PORT=11434
 TRAEFIK_PORT=8080
+BUILDER_PORT=3002
+AUDITOR_WEB_PORT=3003
+SEILING_OS_SERVER_PORT=3737
+SEILING_OS_UI_PORT=5174
 
 # Expanded Capabilities Configuration
 # Langfuse
@@ -497,8 +543,8 @@ SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY
 SUPABASE_DASHBOARD_USERNAME=admin
 SUPABASE_DASHBOARD_PASSWORD=$SUPABASE_DASHBOARD_PASSWORD
 SUPABASE_POOLER_TENANT_ID=$SUPABASE_POOLER_TENANT_ID
-SUPABASE_DEFAULT_ORG=Default Organization
-SUPABASE_DEFAULT_PROJECT=Default Project
+SUPABASE_DEFAULT_ORG=\"Default Organization\"
+SUPABASE_DEFAULT_PROJECT=\"Default Project\"
 SUPABASE_KONG_PORT=8000
 SUPABASE_STUDIO_PORT=8007
 
@@ -506,6 +552,7 @@ SUPABASE_STUDIO_PORT=8007
 VOICE_MODEL=whisper
 CHATTERBOX_API_KEY=
 CHATTERBOX_PORT=3008
+KOKORO_PORT=3080
 
 # Caddy
 N8N_HOSTNAME=:8001

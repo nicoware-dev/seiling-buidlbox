@@ -2,7 +2,7 @@ services:
   seiling-os-server:
     container_name: seiling-os-server
     build:
-      context: ../../packages/seiling-os/server
+      context: ./packages/seiling-os/server
       dockerfile: Dockerfile
     ports:
       - "${SEILING_OS_SERVER_PORT:-3737}:3737"
@@ -16,7 +16,7 @@ services:
       - FLOWISE_URL=${FLOWISE_URL:-http://seiling-flowise:3001}
       - FLOWISE_USERNAME=${FLOWISE_USERNAME:-admin}
       - FLOWISE_PASSWORD=${FLOWISE_PASSWORD:-}
-      - MCP_SERVER_URL=${MCP_SERVER_URL:-http://seiling-sei-mcp-server:3000}
+      - MCP_SERVER_URL=${MCP_SERVER_URL:-http://seiling-sei-mcp-server-v2:${MCP_SERVER_V2_PORT:-3334}}
     volumes:
       - seiling_os_data:/app/data
     networks:
@@ -29,7 +29,7 @@ services:
   seiling-os-ui:
     container_name: seiling-os-ui
     build:
-      context: ../../packages/seiling-os/ui
+      context: ./packages/seiling-os/ui
       dockerfile: Dockerfile
     ports:
       - "${SEILING_OS_UI_PORT:-5174}:5174"

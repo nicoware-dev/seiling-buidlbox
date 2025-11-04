@@ -35,8 +35,7 @@ RUN npm install -g prisma@5.19.1
 
 # Copy necessary files from builder
 # Note: Next.js standalone mode includes minimal node_modules in .next/standalone
-RUN mkdir -p ./public
-RUN if [ -d /app/public ]; then cp -r /app/public/* ./public/ || true; fi
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 RUN mkdir -p ./prisma

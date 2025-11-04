@@ -8,6 +8,10 @@ dotenv.config();
 // Define environment variable schema
 const envSchema = z.object({
   PRIVATE_KEY: z.string().optional(),
+  COINGECKO_API_KEY: z.string().optional(),
+  SEITRACE_API_KEY: z.string().optional(),
+  OPENSEA_API_KEY: z.string().optional(),
+  HIVE_INTELLIGENCE_API_KEY: z.string().optional(),
 });
 
 // Parse and validate environment variables
@@ -60,4 +64,46 @@ export function updatePrivateKey(privateKey: string): void {
   console.error(`🔑 After formatting: "${config.privateKey}"`);
   console.error(`🔑 After formatting length: ${config.privateKey?.length}`);
   console.error('Private key updated successfully');
+}
+
+/**
+ * Get CoinGecko API key from environment (if provided).
+ * If absent, returns undefined and the free API will be used.
+ */
+export function getCoinGeckoApiKey(): string | undefined {
+  // Prefer validated env if available, else read directly
+  if (env.success && env.data.COINGECKO_API_KEY) {
+    return env.data.COINGECKO_API_KEY;
+  }
+  return process.env.COINGECKO_API_KEY;
+}
+
+/**
+ * Get SeiTrace API key from environment (if provided).
+ */
+export function getSeiTraceApiKey(): string | undefined {
+  if (env.success && env.data.SEITRACE_API_KEY) {
+    return env.data.SEITRACE_API_KEY;
+  }
+  return process.env.SEITRACE_API_KEY;
+}
+
+/**
+ * Get OpenSea API key from environment (if provided).
+ */
+export function getOpenSeaApiKey(): string | undefined {
+  if (env.success && env.data.OPENSEA_API_KEY) {
+    return env.data.OPENSEA_API_KEY;
+  }
+  return process.env.OPENSEA_API_KEY;
+}
+
+/**
+ * Get Hive Intelligence API key from environment (if provided).
+ */
+export function getHiveIntelligenceApiKey(): string | undefined {
+  if (env.success && env.data.HIVE_INTELLIGENCE_API_KEY) {
+    return env.data.HIVE_INTELLIGENCE_API_KEY;
+  }
+  return process.env.HIVE_INTELLIGENCE_API_KEY;
 }

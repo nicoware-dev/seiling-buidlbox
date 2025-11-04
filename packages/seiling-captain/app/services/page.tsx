@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import ServicesCatalog from '../../components/ServicesCatalog';
 import { discoverServices } from '../../lib/serviceCatalog';
 import { getServiceStatus } from '../../lib/docker';
@@ -6,7 +8,8 @@ import type { ServiceStatus } from '../../lib/docker';
 
 async function getServices() {
   try {
-    const services = await discoverServices();
+    const repoRoot = process.env.REPO_ROOT;
+    const services = await discoverServices(repoRoot);
     
     // Get status for each service
     const servicesWithStatus = await Promise.all(

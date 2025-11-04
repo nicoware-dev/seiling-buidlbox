@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { executeServiceAction, allowedActionsSchema, type AllowedAction, getServiceStatus } from '../../../lib/docker';
-import { discoverServices } from '../../../lib/serviceCatalog';
+import { discoverServices, findRepoRoot } from '../../../lib/serviceCatalog';
+import { promisify } from 'node:util';
+import { exec } from 'node:child_process';
+const execAsync = promisify(exec);
 import { checkRateLimit, getClientId } from '../../../lib/rateLimit';
 
 /**
@@ -42,7 +45,36 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const services = await discoverServices();
+    const repoRoot = findRepoRoot();
+    let services = await discoverServices(repoRoot);
+    
+    // Fallback: if discovery failed, synthesize from Docker
+    if (!services || services.length === 0) {
+      try {
+        const { stdout } = await execAsync('docker ps -a --format "{{.Names}}|{{.Ports}}" --filter name=seiling-');
+        const lines = stdout.split('\n').map(l => l.trim()).filter(Boolean);
+        services = lines.map(line => {
+          const [name, portsStr] = line.split('|');
+          const id = name.replace(/^seiling-/, '');
+          const ports = [] as Array<{ host: string; container: string; protocol?: string }>;
+          if (portsStr) {
+            portsStr.split(',').forEach(p => {
+              const m = p.trim().match(/(\d+)->(\d+)\/?(\w+)?/);
+              if (m) ports.push({ host: m[1], container: m[2], protocol: m[3] || 'tcp' });
+            });
+          }
+          return {
+            id,
+            name: id,
+            containerName: name,
+            composeFile: '',
+            ports,
+          } as any;
+        });
+      } catch (_) {
+        // ignore; will return empty below
+      }
+    }
     
     // Get status for each service
     const servicesWithStatus = await Promise.all(
@@ -55,10 +87,20 @@ export async function GET(req: NextRequest) {
       })
     );
 
-    return NextResponse.json({
-      ok: true,
-      services: servicesWithStatus
-    });
+    // Debug details when requested
+    const url = new URL(req.url);
+    if (url.searchParams.get('debug') === '1') {
+      return NextResponse.json({
+        ok: true,
+        repoRoot,
+        envRoot: process.env.REPO_ROOT,
+        cwd: process.cwd(),
+        count: servicesWithStatus.length,
+        services: servicesWithStatus,
+      });
+    }
+
+    return NextResponse.json({ ok: true, services: servicesWithStatus });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(

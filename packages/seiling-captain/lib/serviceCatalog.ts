@@ -22,15 +22,37 @@ export interface ServiceMetadata {
  * until we find docker/services/ directory
  */
 export function findRepoRoot(startDir: string = process.cwd()): string {
-  let currentDir = path.resolve(startDir);
-  
-  // Walk up the directory tree looking for docker/services/
-  while (currentDir !== path.dirname(currentDir)) {
-    const dockerServicesDir = path.join(currentDir, 'docker', 'services');
-    if (fs.existsSync(dockerServicesDir)) {
-      return currentDir;
+  // If REPO_ROOT is provided and valid, prefer it
+  const envRoot = process.env.REPO_ROOT;
+  if (envRoot) {
+    // Trust REPO_ROOT explicitly when provided
+    return envRoot;
+  }
+  // Additional common mount points when running inside a container
+  const candidateBases = [
+    startDir,
+    process.cwd(),
+    '/workspace',
+    '/workspace/seiling-buidlbox',
+    '/app',
+    '/home/node/app'
+  ].filter(Boolean);
+
+  for (const base of candidateBases) {
+    let currentDir = path.resolve(base);
+    // Walk up from each base
+    while (currentDir !== path.dirname(currentDir)) {
+      const dockerServicesDir = path.join(currentDir, 'docker', 'services');
+      if (fs.existsSync(dockerServicesDir)) {
+        return currentDir;
+      }
+      currentDir = path.dirname(currentDir);
     }
-    currentDir = path.dirname(currentDir);
+  }
+
+  // Last-chance: if docker/services exists under root of filesystem
+  if (fs.existsSync('/docker/services')) {
+    return '/';
   }
   
   // Fallback to current directory if not found

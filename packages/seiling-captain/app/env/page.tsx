@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import EnvEditor from '../../components/EnvEditor';
 import { parseEnvFile, parseEnvSchema, getEnvPaths } from '../../lib/env';
 

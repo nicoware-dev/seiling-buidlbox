@@ -94,9 +94,13 @@ get_service_file_base() {
     OPENWEBUI) echo "openwebui" ;;
     FLOWISE) echo "flowise" ;;
     SEI_MCP) echo "sei-mcp-server" ;;
+    SEI_MCP_V2) echo "sei-mcp-server-v2" ;;
     ELIZA) echo "eliza" ;;
     CAMBRIAN) echo "cambrian" ;;
     CAPTAIN) echo "captain" ;;
+    OS) echo "os" ;;
+    BUILDER) echo "builder" ;;
+    AUDITOR) echo "auditor" ;;
     POSTGRES) echo "postgres" ;;
     REDIS) echo "redis" ;;
     QDRANT) echo "qdrant" ;;
@@ -114,22 +118,26 @@ get_service_file_base() {
 
 SERVICES=(
   TRAEFIK
+  CADDY
+  CLOUDFLARED
   OLLAMA
   N8N
   OPENWEBUI
   FLOWISE
   SEI_MCP
+  SEI_MCP_V2
   ELIZA
   CAMBRIAN
   CAPTAIN
+  OS
+  BUILDER
+  AUDITOR
   POSTGRES
   REDIS
   QDRANT
   NEO4J
   LANGFUSE
   PROMETHEUS
-  CADDY
-  CLOUDFLARED
   SEARXNG
   SUPABASE
   KOKORO
@@ -164,6 +172,82 @@ if [ ${#INCLUDED_SERVICE_FILES[@]} -eq 0 ]; then
   exit 1
 fi
 
+# Preflight: detect host port conflicts across enabled services
+check_port_conflicts() {
+  local entries=()
+  local add_port
+  add_port() {
+    local name="$1"; local port="$2"
+    if [ -n "$port" ]; then
+      entries+=("$port:$name")
+    fi
+  }
+
+  # Add ports conditionally based on ENABLE_ flags
+  [[ "${ENABLE_TRAEFIK}" =~ ^(yes|y|true|1)$ ]] && { add_port "traefik-80" 80; add_port "traefik-443" 443; add_port "traefik-ui" "${TRAEFIK_PORT:-8080}"; }
+  [[ "${ENABLE_CADDY}" =~ ^(yes|y|true|1)$ ]] && { add_port "caddy-80" 80; add_port "caddy-443" 443; }
+
+  [[ "${ENABLE_N8N}" =~ ^(yes|y|true|1)$ ]] && add_port "n8n" "${N8N_PORT:-5001}"
+  [[ "${ENABLE_OPENWEBUI}" =~ ^(yes|y|true|1)$ ]] && add_port "openwebui" "${OPENWEBUI_PORT:-5002}"
+  [[ "${ENABLE_FLOWISE}" =~ ^(yes|y|true|1)$ ]] && add_port "flowise" "${FLOWISE_PORT:-5003}"
+  [[ "${ENABLE_SEI_MCP}" =~ ^(yes|y|true|1)$ ]] && add_port "mcp-v1" "${MCP_SERVER_PORT:-5004}"
+  [[ "${ENABLE_SEI_MCP_V2}" =~ ^(yes|y|true|1)$ ]] && add_port "mcp-v2" "${MCP_SERVER_V2_PORT:-3334}"
+  [[ "${ENABLE_ELIZA}" =~ ^(yes|y|true|1)$ ]] && add_port "eliza" "${ELIZA_PORT:-5005}"
+  [[ "${ENABLE_CAMBRIAN}" =~ ^(yes|y|true|1)$ ]] && add_port "cambrian" "${CAMBRIAN_AGENT_PORT:-5006}"
+  [[ "${ENABLE_CAPTAIN}" =~ ^(yes|y|true|1)$ ]] && add_port "captain" "${CAPTAIN_PORT:-3001}"
+  [[ "${ENABLE_BUILDER}" =~ ^(yes|y|true|1)$ ]] && add_port "builder" "${BUILDER_PORT:-3002}"
+  [[ "${ENABLE_AUDITOR}" =~ ^(yes|y|true|1)$ ]] && { add_port "auditor-web" "${AUDITOR_WEB_PORT:-3003}"; add_port "auditor-db" "${AUDITOR_DB_PORT:-5433}"; }
+  [[ "${ENABLE_OS}" =~ ^(yes|y|true|1)$ ]] && { add_port "os-server" "${SEILING_OS_SERVER_PORT:-3737}"; add_port "os-ui" "${SEILING_OS_UI_PORT:-5174}"; }
+
+  [[ "${ENABLE_POSTGRES}" =~ ^(yes|y|true|1)$ ]] && add_port "postgres" "${POSTGRES_PORT:-5432}"
+  [[ "${ENABLE_REDIS}" =~ ^(yes|y|true|1)$ ]] && add_port "redis" "${REDIS_PORT:-6379}"
+  [[ "${ENABLE_QDRANT}" =~ ^(yes|y|true|1)$ ]] && add_port "qdrant-http" "${QDRANT_PORT:-6333}"
+  [[ "${ENABLE_NEO4J}" =~ ^(yes|y|true|1)$ ]] && { add_port "neo4j-http" "${NEO4J_HTTP_PORT:-7474}"; add_port "neo4j-bolt" "${NEO4J_BOLT_PORT:-7687}"; }
+  [[ "${ENABLE_OLLAMA}" =~ ^(yes|y|true|1)$ ]] && add_port "ollama" "${OLLAMA_PORT:-11434}"
+  # Note: Langfuse, Grafana, SearXNG, Supabase services, and Chatterbox are exposed only inside the Docker network.
+  # They do not publish host ports by default, so they are intentionally excluded from host port conflict checks.
+
+  # Find duplicates
+  local dups
+  dups=$(printf "%s\n" "${entries[@]}" | cut -d: -f1 | sort | uniq -d || true)
+  if [ -n "$dups" ]; then
+    print_error "Port conflicts detected:"
+    while IFS= read -r port; do
+      [ -z "$port" ] && continue
+      local names
+      names=$(printf "%s\n" "${entries[@]}" | awk -F: -v p="$port" '$1==p{print $2}' | xargs | sed 's/ /, /g')
+      echo "  - Port $port used by: $names"
+    done <<< "$dups"
+    echo ""
+    print_error "Resolve conflicts by editing .env (Service Ports section) and re-run."
+    exit 1
+  fi
+}
+
+print_status "Checking for port conflicts..."
+check_port_conflicts
+
+# Preflight: remove pre-existing containers with the same names as declared in compose files
+print_status "Checking for pre-existing containers with conflicting names..."
+declare -a DECLARED_CONTAINERS=()
+for svc_file in "${INCLUDED_SERVICE_FILES[@]}"; do
+  # Extract container_name values from compose files
+  while IFS= read -r cname; do
+    # cname is like: container_name: seiling-xyz
+    name=$(echo "$cname" | awk -F': ' '{print $2}')
+    if [ -n "$name" ]; then
+      DECLARED_CONTAINERS+=("$name")
+    fi
+  done < <(grep -E '^[[:space:]]*container_name:[[:space:]]' "$svc_file" || true)
+done
+
+for name in "${DECLARED_CONTAINERS[@]}"; do
+  if docker ps -a --format '{{.Names}}' | grep -Fxq "$name"; then
+    print_warning "Removing existing container with conflicting name: $name"
+    docker rm -f "$name" >/dev/null 2>&1 || true
+  fi
+done
+
 # Get the correct Docker Compose command
 DOCKER_COMPOSE_BASE=""
 if command -v docker-compose >/dev/null 2>&1; then
@@ -184,7 +268,7 @@ COMPOSE_CMD="$DOCKER_COMPOSE_BASE"
 for f in "${COMPOSE_FILES[@]}"; do
   COMPOSE_CMD+=" -f $f"
 done
-COMPOSE_CMD+=" up -d --remove-orphans"
+COMPOSE_CMD+=" up -d --build --remove-orphans"
 
 # Compose down/logs commands for menu
 COMPOSE_DOWN_CMD="$DOCKER_COMPOSE_BASE"
@@ -257,9 +341,15 @@ echo "  n8n: http://${BASE_DOMAIN_NAME:-localhost}:${N8N_PORT:-5001}"
 echo "  Flowise: http://${BASE_DOMAIN_NAME:-localhost}:${FLOWISE_PORT:-5003}"
 echo "  Ollama: http://${BASE_DOMAIN_NAME:-localhost}:${OLLAMA_PORT:-11434}"
 echo "  Sei MCP: http://${BASE_DOMAIN_NAME:-localhost}:${MCP_SERVER_PORT:-5004}"
+echo "  Sei MCP v2: http://${BASE_DOMAIN_NAME:-localhost}:${MCP_SERVER_V2_PORT:-3334}"
 echo "  Eliza: http://${BASE_DOMAIN_NAME:-localhost}:${ELIZA_PORT:-5005}"
 echo "  Cambrian: http://${BASE_DOMAIN_NAME:-localhost}:${CAMBRIAN_AGENT_PORT:-5006}"
+echo "  Builder: http://${BASE_DOMAIN_NAME:-localhost}:${BUILDER_PORT:-3002}"
+echo "  Seiling OS UI: http://${BASE_DOMAIN_NAME:-localhost}:${SEILING_OS_UI_PORT:-5174}"
+echo "  Seiling OS API: http://${BASE_DOMAIN_NAME:-localhost}:${SEILING_OS_SERVER_PORT:-3737}"
+echo "  Auditor Web: http://${BASE_DOMAIN_NAME:-localhost}:${AUDITOR_WEB_PORT:-3003}"
 echo "  PostgreSQL: ${BASE_DOMAIN_NAME:-localhost}:${POSTGRES_PORT:-5432}"
+echo "  Auditor DB: ${BASE_DOMAIN_NAME:-localhost}:${AUDITOR_DB_PORT:-5433}"
 echo "  Redis: ${BASE_DOMAIN_NAME:-localhost}:${REDIS_PORT:-6379}"
 echo "  Qdrant: http://${BASE_DOMAIN_NAME:-localhost}:${QDRANT_PORT:-6333}"
 echo "  Neo4j: http://${BASE_DOMAIN_NAME:-localhost}:${NEO4J_HTTP_PORT:-7474}"

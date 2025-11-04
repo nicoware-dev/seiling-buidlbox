@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: seiling_auditor_password
       POSTGRES_DB: seiling_auditor
     ports:
-      - "5433:5432"
+      - "${AUDITOR_DB_PORT:-5433}:5432"
     volumes:
       - auditor_db_data:/var/lib/postgresql/data
     healthcheck:
@@ -54,12 +54,12 @@ services:
   # Web Application
   seiling-auditor-web:
     build:
-      context: ../../packages/seiling-auditor
+      context: ./packages/seiling-auditor
       dockerfile: Dockerfile
     container_name: seiling-auditor-web
     restart: unless-stopped
     ports:
-      - "3003:3003"
+      - "${AUDITOR_WEB_PORT:-3003}:3003"
     environment:
       # Database
       DATABASE_URL: postgresql://seiling_auditor:seiling_auditor_password@seiling-auditor-db:5432/seiling_auditor?schema=public

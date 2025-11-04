@@ -241,7 +241,7 @@ export function validateEnvVariables(
  */
 export function getEnvPaths(repoRoot?: string) {
   // Auto-detect repo root if not provided
-  const actualRepoRoot = repoRoot || (() => {
+  const actualRepoRoot = repoRoot || process.env.REPO_ROOT || (() => {
     const { findRepoRoot } = require('./serviceCatalog');
     return findRepoRoot();
   })();

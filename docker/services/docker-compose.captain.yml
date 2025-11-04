@@ -2,14 +2,18 @@ services:
   captain:
     container_name: seiling-captain
     build:
-      context: ../../packages/seiling-captain
+      context: ./packages/seiling-captain
     ports:
       - "${CAPTAIN_PORT:-3001}:3001"
     environment:
       - ENABLE_CAPTAIN=${ENABLE_CAPTAIN:-yes}
       - NODE_ENV=production
+      - REPO_ROOT=/workspace
     networks:
       - seiling_network
+    volumes:
+      - ./:/workspace:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     entrypoint: >
       sh -c '

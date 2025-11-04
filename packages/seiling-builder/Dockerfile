@@ -17,6 +17,8 @@ FROM nginx:alpine AS runner
 
 # Copy build output to nginx html dir
 COPY --from=builder /app/dist /usr/share/nginx/html
+# Ensure public assets like icon.png/logo.png are present
+COPY --from=builder /app/public /usr/share/nginx/html
 
 # Basic nginx config: serve SPA fallback
 RUN printf '\

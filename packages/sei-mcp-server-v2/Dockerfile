@@ -51,9 +51,6 @@ RUN npm install --only=production && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/build ./build
 
-# Copy entrypoint script
-COPY docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh
 
 # Create logs and config directories
 RUN mkdir -p /app/logs /app/config && chown -R sei:sei /app
@@ -80,5 +77,6 @@ LABEL maintainer="SEI MCP Server Team"
 LABEL description="SEI MCP Server with HTTP/SSE and STDIO transport for MCP clients"
 LABEL version="1.0.0"
 
-# Use the entrypoint script
-ENTRYPOINT ["./docker-entrypoint.sh"] 
+# Start server without external entrypoint script
+# Prefer HTTP mode if present, fall back to stdio
+ENTRYPOINT ["/bin/sh","-c","if [ -f /app/build/http-server.js ]; then exec node /app/build/http-server.js; elif [ -f /app/build/index.js ]; then exec node /app/build/index.js; else echo 'ERROR: No built files found in /app/build'; ls -la /app || true; ls -la /app/build || true; exit 1; fi"]

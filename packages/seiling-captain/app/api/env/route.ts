@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseEnvFile, parseEnvSchema, writeEnvFile, backupEnvFile, validateEnvVariables, getEnvPaths, type EnvVariable } from '../../../lib/env';
+import fs from 'fs';
 import { checkRateLimit, getClientId } from '../../../lib/rateLimit';
 
 /**
@@ -52,12 +53,21 @@ export async function GET(req: NextRequest) {
       varsRecord[variable.key] = variable.value;
     }
 
-    return NextResponse.json({
-      ok: true,
-      vars: varsRecord,
-      schema,
-      variables: vars, // Full structured format
-    });
+    const url = new URL(req.url);
+    if (url.searchParams.get('debug') === '1') {
+      return NextResponse.json({
+        ok: true,
+        paths,
+        exists: { env: fs.existsSync(paths.env), example: fs.existsSync(paths.example) },
+        vars: varsRecord,
+        schema,
+        variables: vars,
+        envRoot: process.env.REPO_ROOT,
+        cwd: process.cwd(),
+      });
+    }
+
+    return NextResponse.json({ ok: true, vars: varsRecord, schema, variables: vars });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(

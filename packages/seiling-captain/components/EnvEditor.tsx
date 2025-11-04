@@ -161,7 +161,15 @@ export default function EnvEditor({ initialVars = {}, schema = {} }: EnvEditorPr
                     </select>
                   ) : (
                     <input
-                      type={type === 'number' ? 'number' : type === 'url' ? 'url' : schemaEntry?.key?.toLowerCase().includes('password') || schemaEntry?.key?.toLowerCase().includes('key') ? 'password' : 'text'}
+                      type={
+                        type === 'number'
+                          ? 'number'
+                          : type === 'url'
+                          ? 'url'
+                          : key.toLowerCase().includes('password') || key.toLowerCase().includes('key')
+                          ? 'password'
+                          : 'text'
+                      }
                       value={vars[key] || ''}
                       onChange={(e) => handleVarChange(key, e.target.value)}
                       placeholder={schemaEntry?.default || ''}

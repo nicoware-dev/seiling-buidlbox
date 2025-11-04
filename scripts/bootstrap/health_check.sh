@@ -141,9 +141,14 @@ run_health_check() {
     "openwebui:${OPENWEBUI_PORT:-5002}:/"
     "flowise:${FLOWISE_PORT:-5003}:/"
     "sei-mcp-server:${MCP_SERVER_PORT:-5004}:/"
+    "sei-mcp-server-v2:${MCP_SERVER_V2_PORT:-3334}:/health"
     "cambrian-agent:${CAMBRIAN_AGENT_PORT:-5006}:/"
     "qdrant:${QDRANT_PORT:-6333}:/"
     "eliza:${ELIZA_PORT:-5005}:/"
+    "builder:${BUILDER_PORT:-3002}:/"
+    "os-server:${SEILING_OS_SERVER_PORT:-3737}:/docs"
+    "os-ui:${SEILING_OS_UI_PORT:-5174}:/"
+    "auditor-web:${AUDITOR_WEB_PORT:-3003}:/"
   )
   
   # Only check Ollama if enabled
@@ -215,6 +220,15 @@ run_health_check() {
       fi
     fi
   done
+
+  # Additional DB check for auditor-db (custom user)
+  if docker ps --filter "name=seiling-auditor-db" --filter "status=running" -q | grep -q .; then
+    if docker exec seiling-auditor-db pg_isready -U seiling_auditor >/dev/null 2>&1; then
+      echo "✓ auditor-db: Database ready"
+    else
+      failed_services+=("auditor-db")
+    fi
+  fi
   
   echo ""
   

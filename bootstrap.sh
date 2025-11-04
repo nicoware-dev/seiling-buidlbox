@@ -610,6 +610,11 @@ Total time: ${minutes}m ${seconds}s" "success"
             echo "OpenWebUI: http://localhost:${OPENWEBUI_PORT:-5002}"
             echo "n8n: http://localhost:${N8N_PORT:-5001}"
             echo "Flowise: http://localhost:${FLOWISE_PORT:-5003}"
+            echo "Sei MCP v2: http://localhost:${MCP_SERVER_V2_PORT:-3334}"
+            echo "Builder: http://localhost:${BUILDER_PORT:-3002}"
+            echo "Seiling OS UI: http://localhost:${SEILING_OS_UI_PORT:-5174}"
+            echo "Seiling OS API: http://localhost:${SEILING_OS_SERVER_PORT:-3737}"
+            echo "Auditor: http://localhost:${AUDITOR_WEB_PORT:-3003}"
         else
             # Remote mode: use subdomains with HTTPS
             echo "Seiling Captain: https://${CAPTAIN_SUBDOMAIN:-captain}.${BASE_DOMAIN_NAME}"

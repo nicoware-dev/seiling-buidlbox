@@ -1,10 +1,13 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import Link from 'next/link';
 
 async function getServiceStats() {
   try {
     const { discoverServices } = await import('../lib/serviceCatalog');
     const { getServiceStatus } = await import('../lib/docker');
-    const services = await discoverServices();
+    const repoRoot = process.env.REPO_ROOT;
+    const services = await discoverServices(repoRoot);
     
     const servicesWithStatus = await Promise.all(
       services.map(async (service) => {
