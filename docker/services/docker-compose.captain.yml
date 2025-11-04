@@ -1,0 +1,30 @@
+services:
+  captain:
+    container_name: seiling-captain
+    build:
+      context: ../../packages/seiling-captain
+    ports:
+      - "${CAPTAIN_PORT:-3001}:3001"
+    environment:
+      - ENABLE_CAPTAIN=${ENABLE_CAPTAIN:-yes}
+      - NODE_ENV=production
+    networks:
+      - seiling_network
+    restart: unless-stopped
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_CAPTAIN" = "yes" ] || [ "$ENABLE_CAPTAIN" = "true" ]; then
+        echo "Starting Seiling Captain...";
+        npm run start;
+      else 
+        echo "Captain disabled by ENABLE_CAPTAIN=$ENABLE_CAPTAIN"; 
+        sleep infinity; 
+      fi
+      '
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.captain.rule=Host(`${CAPTAIN_SUBDOMAIN:-captain}.${BASE_DOMAIN_NAME:-localhost}`)"
+      - "traefik.http.routers.captain.entrypoints=websecure"
+      - "traefik.http.routers.captain.tls.certresolver=myresolver"
+      - "traefik.http.services.captain.loadbalancer.server.port=3001"
+

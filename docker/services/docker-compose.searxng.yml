@@ -1,0 +1,31 @@
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: seiling-searxng
+    restart: unless-stopped
+    environment:
+      - ENABLE_SEARXNG=${ENABLE_SEARXNG:-no}
+      - SEARXNG_BASE_URL=${SEARXNG_BASE_URL:-http://localhost:8080/}
+      - SEARXNG_SECRET_KEY=${SEARXNG_SECRET_KEY:-}
+    volumes:
+      - ./docker/searxng/settings.yml:/etc/searxng/settings.yml:ro
+    expose:
+      - "8080/tcp"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SEARXNG" = "yes" ] || [ "$ENABLE_SEARXNG" = "true" ]; then
+        echo "Starting SearXNG...";
+        exec /sbin/tini -- /usr/local/searxng/dockerfiles/docker-entrypoint.sh;
+      else
+        echo "SearXNG disabled by ENABLE_SEARXNG=$ENABLE_SEARXNG";
+        sleep infinity;
+      fi
+      '

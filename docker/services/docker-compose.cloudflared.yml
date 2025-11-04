@@ -1,0 +1,26 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: seiling-cloudflared
+    restart: unless-stopped
+    environment:
+      - ENABLE_CLOUDFLARED=${ENABLE_CLOUDFLARED:-no}
+      - TUNNEL_TOKEN=${CLOUDFLARED_TUNNEL_TOKEN:-}
+    command: tunnel run
+    networks:
+      - seiling_network
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_CLOUDFLARED" = "yes" ] || [ "$ENABLE_CLOUDFLARED" = "true" ]; then
+        if [ -z "$TUNNEL_TOKEN" ]; then
+          echo "ERROR: CLOUDFLARED_TUNNEL_TOKEN is required when ENABLE_CLOUDFLARED=yes";
+          exit 1;
+        fi;
+        echo "Starting Cloudflared tunnel...";
+        exec cloudflared tunnel run --token "$TUNNEL_TOKEN";
+      else
+        echo "Cloudflared disabled by ENABLE_CLOUDFLARED=$ENABLE_CLOUDFLARED";
+        sleep infinity;
+      fi
+      '
+

@@ -1,0 +1,40 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: seiling-caddy
+    restart: unless-stopped
+    environment:
+      - ENABLE_CADDY=${ENABLE_CADDY:-no}
+      - N8N_HOSTNAME=${N8N_HOSTNAME:-:8001}
+      - WEBUI_HOSTNAME=${WEBUI_HOSTNAME:-:8002}
+      - CAPTAIN_HOSTNAME=${CAPTAIN_HOSTNAME:-:8003}
+      - LANGFUSE_HOSTNAME=${LANGFUSE_HOSTNAME:-:8004}
+      - GRAFANA_HOSTNAME=${GRAFANA_HOSTNAME:-:8005}
+      - SEARXNG_HOSTNAME=${SEARXNG_HOSTNAME:-:8006}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-}
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:2019/metrics"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_CADDY" = "yes" ] || [ "$ENABLE_CADDY" = "true" ]; then
+        echo "Starting Caddy reverse proxy...";
+        exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile;
+      else
+        echo "Caddy disabled by ENABLE_CADDY=$ENABLE_CADDY";
+        sleep infinity;
+      fi
+      '
+

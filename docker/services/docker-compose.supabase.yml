@@ -1,0 +1,247 @@
+services:
+  supabase-db:
+    image: supabase/postgres:15.1.2.58
+    container_name: seiling-supabase-db
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - POSTGRES_PASSWORD=${SUPABASE_DB_PASSWORD:-postgres}
+      - JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+      - JWT_EXP=${JWT_EXP:-3600}
+      - GOTRUE_JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+    volumes:
+      - supabase_db_data:/var/lib/postgresql/data
+    expose:
+      - "5432/tcp"
+    networks:
+      - seiling_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase DB...";
+        exec docker-entrypoint.sh postgres;
+      else
+        echo "Supabase DB disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+  supabase-kong:
+    image: kong:2.8
+    container_name: seiling-supabase-kong
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - KONG_DATABASE=off
+      - KONG_DECLARATIVE_CONFIG=/var/lib/kong/kong.yml
+      - KONG_DNS_ORDER=LAST,A,CNAME
+      - KONG_PLUGINS=request-transformer,cors,key-auth,acl
+      - KONG_NGINX_PROXY_PROXY_BUFFER_SIZE=160k
+      - KONG_NGINX_PROXY_PROXY_BUFFERS=64 160k
+    volumes:
+      - ./docker/supabase/kong.yml:/var/lib/kong/kong.yml:ro
+    expose:
+      - "8000/tcp"
+    networks:
+      - seiling_network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase Kong...";
+        exec /docker-entrypoint.sh kong docker-start;
+      else
+        echo "Supabase Kong disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+  supabase-auth:
+    image: supabase/gotrue:v2.99.0
+    container_name: seiling-supabase-auth
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - GOTRUE_API_HOST=0.0.0.0
+      - GOTRUE_API_PORT=9999
+      - API_EXTERNAL_URL=http://localhost:8000
+      - GOTRUE_DB_DRIVER=postgres
+      - GOTRUE_DB_DATABASE_URL=postgres://postgres:${SUPABASE_DB_PASSWORD:-postgres}@supabase-db:5432/postgres
+      - GOTRUE_SITE_URL=http://localhost:3000
+      - GOTRUE_URI_ALLOW_LIST=
+      - GOTRUE_DISABLE_SIGNUP=false
+      - GOTRUE_JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+      - GOTRUE_JWT_EXP=3600
+      - GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated
+      - GOTRUE_EXTERNAL_EMAIL_ENABLED=true
+      - GOTRUE_MAILER_AUTOCONFIRM=true
+    expose:
+      - "9999/tcp"
+    networks:
+      - seiling_network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+      supabase-kong:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9999/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase Auth...";
+        exec /usr/local/bin/gotrue;
+      else
+        echo "Supabase Auth disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+  supabase-storage:
+    image: supabase/storage-api:v1.10.4
+    container_name: seiling-supabase-storage
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - ANON_KEY=${SUPABASE_ANON_KEY:-}
+      - SERVICE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+      - POSTGREST_URL=http://supabase-kong:8000/rest/v1
+      - PGRST_JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+      - DATABASE_URL=postgres://postgres:${SUPABASE_DB_PASSWORD:-postgres}@supabase-db:5432/postgres
+      - FILE_SIZE_LIMIT=52428800
+      - STORAGE_BACKEND=file
+      - FILE_STORAGE_BACKEND_PATH=/var/lib/storage
+      - TENANT_ID=${SUPABASE_POOLER_TENANT_ID:-}
+    volumes:
+      - supabase_storage_data:/var/lib/storage
+    expose:
+      - "5000/tcp"
+    networks:
+      - seiling_network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+      supabase-kong:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5000/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase Storage...";
+        exec /usr/local/bin/storage-api;
+      else
+        echo "Supabase Storage disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+  supabase-realtime:
+    image: supabase/realtime:v2.25.35
+    container_name: seiling-supabase-realtime
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - PORT=4000
+      - DB_HOST=supabase-db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=${SUPABASE_DB_PASSWORD:-postgres}
+      - DB_NAME=postgres
+      - DB_AFTER_CONNECT_QUERY=SET search_path TO _realtime
+      - DB_ENC_KEY=supabaserealtime
+      - API_JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+      - FLY_ALLOC_ID=fly123
+      - FLY_APP_NAME=realtime
+      - SECURE_CHANNELS=true
+      - JWT_SECRET=${SUPABASE_JWT_SECRET:-}
+      - ERL_AFLAGS=-proto_dist inet_tcp
+    expose:
+      - "4000/tcp"
+    networks:
+      - seiling_network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase Realtime...";
+        exec /app/bin/server;
+      else
+        echo "Supabase Realtime disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+  supabase-studio:
+    image: supabase/studio:20231204-90f1c0c
+    container_name: seiling-supabase-studio
+    restart: unless-stopped
+    environment:
+      - ENABLE_SUPABASE=${ENABLE_SUPABASE:-no}
+      - STUDIO_PG_META_URL=http://supabase-kong:8000
+      - POSTGRES_PASSWORD=${SUPABASE_DB_PASSWORD:-postgres}
+      - DEFAULT_ORGANIZATION_NAME=${SUPABASE_DEFAULT_ORG:-Default Organization}
+      - DEFAULT_PROJECT_NAME=${SUPABASE_DEFAULT_PROJECT:-Default Project}
+      - SUPABASE_URL=http://localhost:8000
+      - SUPABASE_PUBLIC_URL=http://localhost:8000
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY:-}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+    expose:
+      - "3000/tcp"
+    networks:
+      - seiling_network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+      supabase-kong:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/profile"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    entrypoint: >
+      sh -c '
+      if [ "$ENABLE_SUPABASE" = "yes" ] || [ "$ENABLE_SUPABASE" = "true" ]; then
+        echo "Starting Supabase Studio...";
+        exec /bin/sh /studio/docker-entrypoint.sh;
+      else
+        echo "Supabase Studio disabled by ENABLE_SUPABASE=$ENABLE_SUPABASE";
+        sleep infinity;
+      fi
+      '
+
+volumes:
+  supabase_db_data:
+  supabase_storage_data:

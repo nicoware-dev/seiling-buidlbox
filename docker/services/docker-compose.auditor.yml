@@ -1,0 +1,96 @@
+services:
+  # PostgreSQL Database
+  seiling-auditor-db:
+    image: postgres:15-alpine
+    container_name: seiling-auditor-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: seiling_auditor
+      POSTGRES_PASSWORD: seiling_auditor_password
+      POSTGRES_DB: seiling_auditor
+    ports:
+      - "5433:5432"
+    volumes:
+      - auditor_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U seiling_auditor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Slither Static Analyzer
+  seiling-auditor-slither:
+    image: trailofbits/eth-security-toolbox:latest
+    container_name: seiling-auditor-slither
+    restart: unless-stopped
+    volumes:
+      - analysis_workspace:/workspace
+    working_dir: /workspace
+    command: sh -c "
+      echo 'Installing common Solidity versions...' &&
+      solc-select install 0.4.26 &&
+      solc-select install 0.5.16 &&
+      solc-select install 0.6.12 &&
+      solc-select install 0.7.6 &&
+      solc-select install 0.8.19 &&
+      solc-select install 0.8.20 &&
+      solc-select install 0.8.21 &&
+      solc-select use 0.8.19 &&
+      echo 'Solidity versions installed successfully' &&
+      solc-select versions &&
+      tail -f /dev/null
+      "
+    
+  # Mythril Static Analyzer
+  seiling-auditor-mythril:
+    image: mythril/myth:latest
+    container_name: seiling-auditor-mythril
+    restart: unless-stopped
+    volumes:
+      - analysis_workspace:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+
+  # Web Application
+  seiling-auditor-web:
+    build:
+      context: ../../packages/seiling-auditor
+      dockerfile: Dockerfile
+    container_name: seiling-auditor-web
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    environment:
+      # Database
+      DATABASE_URL: postgresql://seiling_auditor:seiling_auditor_password@seiling-auditor-db:5432/seiling_auditor?schema=public
+      
+      # Application
+      NODE_ENV: production
+      NEXT_PUBLIC_BASE_URL: http://localhost:3003
+      
+      # AI Provider (set via .env or override)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      
+      # SeiScan API
+      SEISCAN_API_URL: ${SEISCAN_API_URL:-https://api.seiscan.app}
+      SEISCAN_API_KEY: ${SEISCAN_API_KEY:-}
+    depends_on:
+      seiling-auditor-db:
+        condition: service_healthy
+      seiling-auditor-slither:
+        condition: service_started
+      seiling-auditor-mythril:
+        condition: service_started
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # For Docker API access to analyzer containers
+      - analysis_workspace:/tmp/analysis  # Shared workspace for analysis files
+    command: sh -c "npx prisma migrate deploy && node server.js"
+    user: root  # Required for Docker socket access
+
+volumes:
+  analysis_workspace:
+    driver: local
+  auditor_db_data:
+    driver: local
+

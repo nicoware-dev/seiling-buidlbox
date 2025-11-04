@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  seiling-builder:
+    container_name: seiling-builder
+    build:
+      context: ../../packages/seiling-builder
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+    command: ["npm", "run", "preview"]
+    restart: unless-stopped
+

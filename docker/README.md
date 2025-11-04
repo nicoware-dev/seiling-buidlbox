@@ -58,6 +58,23 @@ docker/
 
 ### Infrastructure
 - **Traefik**: Reverse proxy with automatic SSL
+- **Caddy**: Modern reverse proxy with auto-SSL (alternative to Traefik)
+- **Cloudflared**: Zero-trust tunneling for secure service exposure
+
+### Expanded Capabilities (Optional)
+- **Langfuse**: LLM observability and tracing platform
+  - Tracks LLM calls across n8n, Flowise, ElizaOS, and Cambrian
+  - Includes ClickHouse for analytics and MinIO for storage
+- **Prometheus/Grafana**: System monitoring and metrics
+  - Prometheus collects metrics from all services
+  - Grafana provides visualization dashboards
+- **SearXNG**: Privacy-focused meta-search engine
+  - Includes Sei-specific search engines (SeiScan, SeiTrace)
+- **Supabase**: Full Backend-as-a-Service stack
+  - PostgreSQL database, Kong API gateway, Auth, Storage, Realtime, Studio
+- **Kokoro/Chatterbox**: Voice-enabled multi-modal agents
+  - TTS (Text-to-Speech) and ASR (Automatic Speech Recognition)
+  - Voice-enabled chat interface
 
 ## 📦 Docker Images Used
 
@@ -75,6 +92,23 @@ docker/
 | Redis                  | `redis:7-alpine`                             | Caching and session management   |
 | Sei MCP Server         | `0xn1c0/sei-mcp-server:multi`                | Blockchain integration           |
 | Traefik                | `traefik:v3.0`                               | Reverse proxy                    |
+| Langfuse               | `langfuse/langfuse:3`                        | LLM observability (optional)     |
+| Langfuse Worker        | `langfuse/langfuse:3`                        | Background processing (optional) |
+| ClickHouse             | `clickhouse/clickhouse-server:latest`        | Analytics DB for Langfuse        |
+| MinIO                  | `minio/minio:latest`                         | S3 storage for Langfuse          |
+| Prometheus             | `prom/prometheus:latest`                     | Metrics collection (optional)    |
+| Grafana                | `grafana/grafana:latest`                     | Monitoring dashboards (optional) |
+| SearXNG                | `searxng/searxng:latest`                     | Privacy search (optional)        |
+| Supabase DB            | `supabase/postgres:15.1.2.58`                | Supabase database (optional)     |
+| Supabase Kong          | `kong:2.8`                                   | Supabase API gateway (optional)  |
+| Supabase Auth          | `supabase/gotrue:v2.99.0`                    | Supabase authentication (optional)|
+| Supabase Storage       | `supabase/storage-api:v1.10.4`               | Supabase storage (optional)      |
+| Supabase Realtime      | `supabase/realtime:v2.25.35`                 | Supabase realtime (optional)     |
+| Supabase Studio        | `supabase/studio:20231204-90f1c0c`           | Supabase admin UI (optional)     |
+| Kokoro                 | `ghcr.io/codewithryan/kokoro:latest`         | TTS/ASR service (optional)       |
+| Chatterbox             | `ghcr.io/opentalkz/chatterbox:latest`        | Voice-enabled chat (optional)    |
+| Caddy                  | `caddy:2-alpine`                             | Reverse proxy (optional)         |
+| Cloudflared            | `cloudflare/cloudflared:latest`              | Tunnel service (optional)        |
 
 ## ⚙️ Configuration
 
@@ -119,17 +153,25 @@ Default port mappings:
 
 | Service | Port | Description |
 |---------|------|-------------|
-| OpenWebUI | 3000 | Primary user interface |
-| n8n | 5678 | Workflow automation |
-| Flowise | 3001 | Agent building |
+| OpenWebUI | 5002 | Primary user interface |
+| n8n | 5001 | Workflow automation |
+| Flowise | 5003 | Agent building |
 | Ollama | 11434 | LLM API |
-| Sei MCP | 8080 | Blockchain integration |
-| Cambrian | 8081 | Multi-modal agent |
-| Eliza | 8082 | Conversational agent |
+| Sei MCP | 5004 | Blockchain integration |
+| Cambrian | 5006 | Multi-modal agent |
+| Eliza | 5005 | Conversational agent |
 | PostgreSQL | 5432 | Database |
 | Redis | 6379 | Cache |
 | Qdrant | 6333 | Vector DB |
 | Neo4j | 7474 | Graph DB |
+| Langfuse | 8004 | LLM observability (optional) |
+| Prometheus | 9090 | Metrics collection (optional) |
+| Grafana | 8005 | Monitoring dashboards (optional) |
+| SearXNG | 8006 | Privacy search (optional) |
+| Supabase Kong | 8000 | API gateway (optional) |
+| Supabase Studio | 8007 | Admin UI (optional) |
+| Chatterbox | 3008 | Voice-enabled chat (optional) |
+| Caddy | 80/443 | Reverse proxy (optional) |
 
 ## 🛠️ Management Commands
 

@@ -1,0 +1,38 @@
+server:
+  # Note: secret_key here is a placeholder. The actual key is set via SEARXNG_SECRET_KEY environment variable
+  secret_key: CHANGE_ME_IN_ENV_FILE
+
+search:
+  formats:
+    - html
+    - json
+
+engines:
+  - name: google
+    engine: google
+    shortcut: g
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: d
+  - name: bing
+    engine: bing
+    shortcut: b
+  - name: seiscan
+    engine: google
+    shortcut: sc
+    base_url: https://seiscan.app
+  - name: seitrace
+    engine: google
+    shortcut: st
+    base_url: https://seitrace.io
+
+result_templates:
+  default: oscar
+  answer: answer.html
+
+ui:
+  infinite_scroll: true
+  theme_args:
+    categories_as_tabs: true
+  static_use_hash: true
+

@@ -1,0 +1,44 @@
+{
+    email ${LETSENCRYPT_EMAIL:-internal}
+    auto_https disable_redirects
+}
+
+# N8N
+{$N8N_HOSTNAME} {
+    reverse_proxy n8n:5678
+}
+
+# OpenWebUI
+{$WEBUI_HOSTNAME} {
+    reverse_proxy openwebui:8080
+}
+
+# Captain
+{$CAPTAIN_HOSTNAME} {
+    reverse_proxy captain:3001
+}
+
+# Langfuse
+{$LANGFUSE_HOSTNAME} {
+    reverse_proxy langfuse-web:3000
+}
+
+# Grafana
+{$GRAFANA_HOSTNAME} {
+    reverse_proxy grafana:3000
+}
+
+# SearXNG
+{$SEARXNG_HOSTNAME} {
+    reverse_proxy searxng:8080
+}
+
+# Add security headers globally
+header {
+    Strict-Transport-Security "max-age=31536000;"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    X-XSS-Protection "1; mode=block"
+    Referrer-Policy "strict-origin-when-cross-origin"
+}
+
