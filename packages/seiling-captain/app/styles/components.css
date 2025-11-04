@@ -1,0 +1,103 @@
+/* Reusable components & utilities */
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  transition: box-shadow var(--t-normal), border-color var(--t-fast), transform var(--t-fast);
+}
+
+.card:hover { box-shadow: var(--shadow-md); }
+
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), opacity var(--t-fast);
+}
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-primary { background: var(--sbx-blue); color: white; }
+.btn-primary:hover { box-shadow: 0 6px 20px rgba(37,99,235,0.25); transform: translateY(-1px); }
+
+.btn-secondary { background: var(--sbx-gray-light); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+
+/* Outline button for header/navigation */
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--sbx-blue); background: color-mix(in oklab, var(--sbx-blue) 18%, transparent); }
+
+.btn-success { background: var(--sbx-green); color: white; }
+.btn-danger { background: #dc2626; color: white; }
+.btn-warning { background: #f59e0b; color: white; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.badge-green { background: #dcfce7; color: #166534; border-color: #86efac; }
+.badge-yellow { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+.badge-gray { background: #f3f4f6; color: #374151; border-color: #d1d5db; }
+.badge-red { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+
+.tile {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tile:hover { border-color: var(--sbx-blue); background: color-mix(in oklab, var(--sbx-blue) 12%, transparent); }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.input, .select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.kpi-card { text-align: center; }
+.kpi-value { font-size: 24px; font-weight: 800; color: var(--sbx-blue); }
+.kpi-label { font-size: 14px; color: var(--sbx-gray-medium); }
+
+.terminal {
+  background: #1f2937;
+  color: #f9fafb;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+

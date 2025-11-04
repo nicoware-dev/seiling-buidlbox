@@ -1,0 +1,11 @@
+/* Global entry - import brand styles and keep legacy helpers */
+@import './styles/variables.css';
+@import './styles/base.css';
+@import './styles/components.css';
+
+/* Legacy helpers (kept for backward compatibility) */
+.nav-link { display: block; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text); font-weight: 500; transition: all 0.2s; }
+.nav-link:hover { border-color: var(--sbx-blue); background: color-mix(in oklab, var(--sbx-blue) 12%, transparent); }
+.service-card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: var(--shadow-sm); background-color: var(--bg-surface); }
+.service-card:hover { box-shadow: var(--shadow-md); }
+
